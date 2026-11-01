@@ -383,19 +383,20 @@ async function getUsers(){
       login: data.login || (data.email||'').split('@')[0],
       balance: Number.isSafeInteger(data.balance) ? data.balance : 0,
       transactions: Array.isArray(data.transactions) ? data.transactions : [],
-      cards: Array.isArray(data.cards) ? data.cards : [] // <--- ДОБАВЛЕНА ЭТА СТРОКА
+      cards: Array.isArray(data.cards) ? data.cards : []
     };
   });
   return usersCache;
 }
 function normalizeUser(id,data,fallbackLogin){
-  return {...data,id,login:data.login||fallbackLogin||(data.email||'').split('@')[0],balance:Number.isSafeInteger(data.balance)?data.balance:0,transactions:Array.isArray(data.transactions)?data.transactions:[]};
-}
-async function saveUser(user){
-  const {id,...data}=user;
-  await USERS_COL.doc(id).set(data,{merge:true});
-  const idx=usersCache.findIndex(u=>u.id===id);
-  if(idx>=0)usersCache[idx]=user;
+  return {
+    ...data,
+    id,
+    login: data.login || fallbackLogin || (data.email||'').split('@')[0],
+    balance: Number.isSafeInteger(data.balance) ? data.balance : 0,
+    transactions: Array.isArray(data.transactions) ? data.transactions : [],
+    cards: Array.isArray(data.cards) ? data.cards : []
+  };
 }
 async function findUserByLogin(login){
   const snap=await USERS_COL.where('login','==',login).limit(1).get();
