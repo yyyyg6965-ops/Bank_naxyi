@@ -461,7 +461,6 @@ function normalizeUser(id,data,fallbackLogin){
     cards: Array.isArray(data.cards) ? data.cards : []
   };
 }
-
 async function getUsers(){
   const snap=await USERS_COL.get();
   usersCache=snap.docs.map(d=>{
