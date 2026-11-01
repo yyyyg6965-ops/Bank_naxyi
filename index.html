@@ -450,7 +450,7 @@ bind('#loginForm','submit',async()=>{
     else fail('Не удалось войти: '+err.message);
   }
   const doc=await USERS_COL.doc(cred.user.uid).get();
-   if(!doc.exists)fail('Данные учётной записи не найдены.');
+  if(!doc.exists)fail('Данные учётной записи не найдены.');
   const user=normalizeUser(cred.user.uid,doc.data(),login);
   setSession(user);
   $('#loginForm').reset();
@@ -701,7 +701,8 @@ function initLottery() {
   const target = document.querySelector('#page-overview .grid > div:last-child');
   if (!target || document.getElementById('lotteryWidget')) return;
   const div = document.createElement('div'); div.id = 'lotteryWidget';
-  div.innerHTML = `<div class="card" style="margin-top:15px"><div class="section-head"><h3>Ежедневная лотерея</h3></div><p>Выиграйте до 500 ₽ раз в день.</p><button class="primary" id="playLottery">Испытать удачу</button><div id="lotteryResult" style="margin-top:10px;font-weight:bold"></div></div>`;
+  div.innerHTML = `<div class="card" style="margin-top:15px"><div class="section-head"><h3>Ежедневная лотерея</h3></div><p>Выиграйте до 500 ₽ раз в день.</p><button class="primary" id="playLottery">Испытать удачу</button><div>
+ id="lotteryResult" style="margin-top:10px;font-weight:bold"></div></div>`;
   target.appendChild(div);
   document.getElementById('playLottery').onclick = async () => { const today = new Date().toISOString().slice(0, 10); if (current.lastLottery === today) return showToast('Вы уже играли сегодня.'); const win = Math.floor(Math.random() * 500) + 1; await mutate(u => { u.balance += win; u.lastLottery = today; u.transactions.push(tx('Выигрыш в лотерее', win, 'in')); }); document.getElementById('lotteryResult').innerHTML = `<span style="color:#1f643e">Вы выиграли ${money(win)}!</span>`; showToast(`Поздравляем!`); };
 }
