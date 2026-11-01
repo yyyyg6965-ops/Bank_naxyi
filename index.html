@@ -458,8 +458,24 @@ function normalizeUser(id,data,fallbackLogin){
     login: data.login || fallbackLogin || (data.email||'').split('@')[0],
     balance: Number.isSafeInteger(data.balance) ? data.balance : 0,
     transactions: Array.isArray(data.transactions) ? data.transactions : [],
-    cards: Array.isArray(data.cards) ? data.cards : [] // <--- ДОБАВЛЕНА ЭТА СТРОКА
+    cards: Array.isArray(data.cards) ? data.cards : []
   };
+}
+
+async function getUsers(){
+  const snap=await USERS_COL.get();
+  usersCache=snap.docs.map(d=>{
+    const data=d.data();
+    return {
+      ...data,
+      id: d.id,
+      login: data.login || (data.email||'').split('@')[0],
+      balance: Number.isSafeInteger(data.balance) ? data.balance : 0,
+      transactions: Array.isArray(data.transactions) ? data.transactions : [],
+      cards: Array.isArray(data.cards) ? data.cards : []
+    };
+  });
+  return usersCache;
 }
 
 // ===== MUTATE (через Firestore) =====
