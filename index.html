@@ -377,7 +377,14 @@ async function getUsers(){
   const snap=await USERS_COL.get();
   usersCache=snap.docs.map(d=>{
     const data=d.data();
-    return {...data,id:d.id,login:data.login||(data.email||'').split('@')[0],balance:Number.isSafeInteger(data.balance)?data.balance:0,transactions:Array.isArray(data.transactions)?data.transactions:[]};
+    return {
+      ...data,
+      id: d.id,
+      login: data.login || (data.email||'').split('@')[0],
+      balance: Number.isSafeInteger(data.balance) ? data.balance : 0,
+      transactions: Array.isArray(data.transactions) ? data.transactions : [],
+      cards: Array.isArray(data.cards) ? data.cards : [] // <--- ДОБАВЛЕНА ЭТА СТРОКА
+    };
   });
   return usersCache;
 }
@@ -443,11 +450,16 @@ bind('#loginForm','submit',async()=>{
   }
   const doc=await USERS_COL.doc(cred.user.uid).get();
   if(!doc.exists)fail('Данные учётной записи не найдены.');
-  const user=normalizeUser(cred.user.uid,doc.data(),login);
-  setSession(user);
-  $('#loginForm').reset();
-  openApp();
-},'#loginMsg');
+function normalizeUser(id,data,fallbackLogin){
+  return {
+    ...data,
+    id,
+    login: data.login || fallbackLogin || (data.email||'').split('@')[0],
+    balance: Number.isSafeInteger(data.balance) ? data.balance : 0,
+    transactions: Array.isArray(data.transactions) ? data.transactions : [],
+    cards: Array.isArray(data.cards) ? data.cards : [] // <--- ДОБАВЛЕНА ЭТА СТРОКА
+  };
+}
 
 // ===== MUTATE (через Firestore) =====
 async function mutate(fn){
