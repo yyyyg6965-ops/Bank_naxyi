@@ -845,17 +845,67 @@ const playlist = [
 ];
 function initMusic() {
   if (document.getElementById('midiPlayer')) return;
-  const player = document.createElement('div'); player.id = 'midiPlayer';
-  player.style.cssText = 'position:fixed;bottom:20px;left:20px;z-index:999;background:#d4d0c8;border:2px outset #fff;padding:4px 8px;font:11px "MS Sans Serif",sans-serif;display:flex;align-items:center;gap:8px;';
-  player.innerHTML = `<button id="playMusic" style="background:#c0c0c0;border:1px solid #808080;padding:2px 8px;cursor:pointer">▶ Play</button><span id="trackName" style="min-width:150px;max:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#000;font-weight:bold">Выберите трек</span>`;
+  
+  const player = document.createElement('div'); 
+  player.id = 'midiPlayer';
+  player.style.cssText = 'position:fixed;bottom:20px;left:20px;z-index:999;background:#d4d0c8;border:2px outset #fff;padding:4px 8px;font:11px "MS Sans Serif",sans-serif;display:flex;align-items:center;gap:8px;box-shadow:2px 2px 0 #000';
+  
+  // Возвращаем кнопки переключения треков
+  player.innerHTML = `
+    <button id="playMusic" style="background:#c0c0c0;border:1px solid #808080;padding:2px 8px;cursor:pointer">▶ Play</button>
+    <button id="prevMusic" style="background:#c0c0c0;border:1px solid #808080;padding:2px 6px;cursor:pointer">◀◀</button>
+    <button id="nextMusic" style="background:#c0c0c0;border:1px solid #808080;padding:2px 6px;cursor:pointer">▶▶</button>
+    <span id="trackName" style="min-width:150px;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#000;font-weight:bold">Выберите трек</span>
+  `;
+  
   document.body.appendChild(player);
-  musicAudio = new Audio(); musicAudio.volume = 0.2;
-  const updateTrackLabel = () => { const nameEl = document.getElementById('trackName'); if (playlist[currentTrackIndex]) nameEl.textContent = playlist[currentTrackIndex].title; };
-  const playTrack = () => { if (!playlist[currentTrackIndex]) return; musicAudio.src = playlist[currentTrackIndex].src; musicAudio.play().then(() => { document.getElementById('playMusic').textContent = '⏸ Stop'; }).catch(e => showToast('Нажмите Play еще раз')); updateTrackLabel(); };
-  document.getElementById('playMusic').onclick = () => { if (musicAudio.paused) playTrack(); else { musicAudio.pause(); document.getElementById('playMusic').textContent = '▶ Play'; } };
+  
+  musicAudio = new Audio(); 
+  musicAudio.volume = 0.2;
+  
+  const updateTrackLabel = () => { 
+    const nameEl = document.getElementById('trackName'); 
+    if (playlist[currentTrackIndex]) nameEl.textContent = playlist[currentTrackIndex].title; 
+  };
+  
+  const playTrack = () => { 
+    if (!playlist[currentTrackIndex]) return; 
+    musicAudio.src = playlist[currentTrackIndex].src; 
+    musicAudio.play().then(() => { 
+      document.getElementById('playMusic').textContent = '⏸ Stop'; 
+    }).catch(e => showToast('Нажмите Play еще раз')); 
+    updateTrackLabel(); 
+  };
+  
+  document.getElementById('playMusic').onclick = () => { 
+    if (musicAudio.paused) playTrack(); 
+    else { musicAudio.pause(); document.getElementById('playMusic').textContent = '▶ Play'; } 
+  };
+  
+  // Обработчики для кнопок "Назад" и "Вперед"
+  document.getElementById('nextMusic').onclick = () => { 
+    if (!playlist.length) return; 
+    currentTrackIndex = (currentTrackIndex + 1) % playlist.length; 
+    if (!musicAudio.paused) playTrack(); else updateTrackLabel(); 
+  };
+  
+  document.getElementById('prevMusic').onclick = () => { 
+    if (!playlist.length) return; 
+    currentTrackIndex = (currentTrackIndex - 1 + playlist.length) % playlist.length; 
+    if (!musicAudio.paused) playTrack(); else updateTrackLabel(); 
+  };
+  
+  musicAudio.onended = () => { 
+    if (playlist.length > 1) { 
+      currentTrackIndex = (currentTrackIndex + 1) % playlist.length; 
+      playTrack(); 
+    } else { 
+      document.getElementById('playMusic').textContent = '▶ Play'; 
+    } 
+  };
+  
   updateTrackLabel();
 }
-
 function initLottery() {
   const target = document.querySelector('#page-overview .grid > div:last-child');
   if (!target || document.getElementById('lotteryWidget')) return;
