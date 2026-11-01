@@ -8,347 +8,515 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <style>
-:root{--green:#1d6fa5;--green2:#0b4f7a;--mint:#e8f2f8;--ink:#183344;--muted:#667984;--line:#b8cbd6;--bg:#dfe8ed;--white:#fff;--danger:#a93245;--shadow:0 12px 28px rgba(25,58,77,.22)}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,input{font:inherit}button{cursor:pointer;border:0}.hidden{display:none!important}
-.auth{min-height:100vh;display:grid;grid-template-columns:1.1fr .9fr;background:linear-gradient(135deg,#e9f8f0 0%,#f7fbf8 54%,#fff 54%)}
-.auth-art{padding:clamp(30px,6vw,90px);display:flex;flex-direction:column;justify-content:space-between;min-height:100vh}.brand{display:flex;align-items:center;gap:12px;font-weight:800;font-size:22px;letter-spacing:-.5px}.brand-mark{width:42px;height:42px;border-radius:14px;background:var(--green);display:grid;place-items:center;color:#fff;font-weight:900;box-shadow:0 8px 20px #20a46444}.brand-mark:before{content:'З';font-size:23px}.art-copy{max-width:520px}.art-copy h1{font-size:clamp(40px,5vw,72px);line-height:1.02;letter-spacing:-3px;margin:0 0 24px}.art-copy p{font-size:20px;color:#507061;max-width:450px}.auth-panel{display:flex;align-items:center;justify-content:center;padding:30px}.auth-box{width:min(430px,100%);background:#fff;border:1px solid #edf2ee;border-radius:27px;padding:clamp(25px,4vw,42px);box-shadow:var(--shadow)}.auth-box h2{font-size:30px;margin:0 0 8px;letter-spacing:-1px}.sub{color:var(--muted);margin:0 0 26px}.tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#f1f5f2;padding:5px;border-radius:12px;margin-bottom:25px}.tabs button{background:transparent;border-radius:9px;padding:11px;color:var(--muted)}.tabs button.active{background:#fff;color:var(--green2);font-weight:700;box-shadow:0 2px 8px #173d2412}.field{margin:14px 0}.field label{display:block;font-size:13px;font-weight:700;margin-bottom:7px}.field input{width:100%;padding:14px 15px;border:1px solid #dce6df;border-radius:12px;outline:0;background:#fbfdfc;transition:.2s}.field input:focus{border-color:var(--green);box-shadow:0 0 0 4px #20a46418}.primary{width:100%;background:var(--green);color:#fff;padding:14px;border-radius:12px;font-weight:800;transition:.2s}.primary:hover{background:var(--green2);transform:translateY(-1px)}.message{min-height:22px;font-size:13px;margin-top:12px;color:var(--danger)}.auth-note{font-size:12px;color:#95a39a;text-align:center;margin:18px 0 0}
-.app{min-height:100vh;display:grid;grid-template-columns:246px 1fr}.side{background:#fff;border-right:1px solid var(--line);padding:26px 16px;display:flex;flex-direction:column}.side .brand{padding:0 12px 35px}.nav{display:grid;gap:6px}.nav button{display:flex;align-items:center;gap:13px;padding:13px 14px;border-radius:12px;background:transparent;color:#708078;text-align:left}.nav button:hover,.nav button.active{background:var(--mint);color:var(--green2);font-weight:700}.nav svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.8}.side-bottom{margin-top:auto;border-top:1px solid var(--line);padding-top:17px}.user-mini{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding:0 8px}.avatar{width:35px;height:35px;border-radius:50%;background:var(--mint);color:var(--green2);display:grid;place-items:center;font-weight:800}.user-mini small{display:block;color:var(--muted);font-size:11px;max-width:135px;overflow:hidden;text-overflow:ellipsis}.logout{background:transparent;color:#77857d;padding:9px 8px}.main{min-width:0}.topbar{height:78px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 clamp(20px,4vw,50px)}.topbar h1{font-size:23px;margin:0;letter-spacing:-.7px}.top-actions{display:flex;gap:10px;align-items:center}.icon-btn{width:40px;height:40px;border-radius:12px;background:#f2f7f3;color:#547466;display:grid;place-items:center}.icon-btn svg{width:19px;stroke:currentColor;fill:none;stroke-width:1.8}.content{padding:clamp(20px,4vw,48px);max-width:1340px}.welcome{display:flex;align-items:end;justify-content:space-between;margin-bottom:26px}.welcome h2{font-size:31px;letter-spacing:-1px;margin:0 0 5px}.welcome p{color:var(--muted);margin:0}.date{font-size:13px;color:var(--muted);background:#fff;border:1px solid var(--line);padding:10px 13px;border-radius:10px}.grid{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(300px,.8fr);gap:22px}.card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:25px;box-shadow:0 8px 30px rgba(20,75,45,.035)}.balance-card{color:#fff;background:linear-gradient(135deg,#159963,#087146);position:relative;overflow:hidden;min-height:220px}.balance-card:after{content:'';position:absolute;width:260px;height:260px;border:1px solid #ffffff33;border-radius:50%;right:-95px;top:-110px;box-shadow:0 0 0 28px #ffffff0d,0 0 0 58px #ffffff08}.balance-label{opacity:.78}.balance{font-size:43px;letter-spacing:-2px;font-weight:800;margin:18px 0 21px}.balance small{font-size:22px;letter-spacing:0}.account-line{display:flex;justify-content:space-between;opacity:.8;font-size:13px}.section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.section-head h3{font-size:18px;margin:0}.link-btn{background:transparent;color:var(--green2);font-weight:700;padding:0}.quick{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}.quick button{background:var(--mint);color:var(--green2);border-radius:13px;padding:16px 8px;font-weight:700;display:grid;gap:8px;justify-items:center}.quick button:hover{background:#d8f3e3}.quick span{font-size:12px}.qicon{font-size:21px}.transactions{margin-top:22px}.tx{display:flex;align-items:center;gap:13px;padding:13px 0;border-bottom:1px solid var(--line)}.tx:last-child{border-bottom:0;padding-bottom:0}.tx-icon{width:39px;height:39px;border-radius:12px;display:grid;place-items:center;background:#f0f7f2;color:var(--green2);font-weight:800}.tx-info{min-width:0;flex:1}.tx-info strong{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tx-info small{color:var(--muted)}.tx-amount{font-weight:800;text-align:right}.positive{color:var(--green2)}.negative{color:#35443d}.empty{color:var(--muted);padding:14px 0}.notice{background:#f9f5e8;border:1px solid #f3e8c6;color:#7a6736;border-radius:14px;padding:14px;font-size:13px;margin-top:22px}.page{display:none}.page.active{display:block}.profile-form{max-width:570px}.modal-back{position:fixed;inset:0;background:#12251b88;display:grid;place-items:center;padding:20px;z-index:20}.modal{width:min(440px,100%);background:#fff;border-radius:22px;padding:27px;box-shadow:0 25px 80px #0003}.modal h3{margin:0 0 6px;font-size:22px}.modal p{color:var(--muted);margin:0 0 16px}.modal-actions{display:flex;gap:10px;margin-top:18px}.modal-actions button{flex:1}.secondary{background:#eef5f0;color:#456956;padding:13px;border-radius:12px;font-weight:700}.toast{position:fixed;right:24px;bottom:24px;background:#17372a;color:#fff;padding:14px 17px;border-radius:13px;box-shadow:var(--shadow);transform:translateY(20px);opacity:0;pointer-events:none;transition:.25s;z-index:30}.toast.show{transform:none;opacity:1}
-/* Ретро-стиль */
-:root{--green:#173d82;--green2:#002b75;--mint:#eaf0f8;--ink:#1d2434;--muted:#667080;--line:#a8b9d1;--bg:#fff;--shadow:2px 2px 0 #ccd3df}
-body{background:#fff;color:#222;font:13px/1.4 Arial,Helvetica,sans-serif;margin:0;padding:14px 18px}a{color:#000099;text-decoration:underline}button{cursor:pointer}button:focus-visible,a:focus-visible{outline:2px dotted #d66c00;outline-offset:3px}input:focus{outline:1px solid #486aa3!important}button,input,.card,.auth-box,.modal,.avatar,.tabs,.notice,.date,.tx-icon{border-radius:0!important}button{font:13px Arial,sans-serif}.portal-shell{width:min(980px,100%);margin:auto}.utility{display:flex;justify-content:space-between;border-bottom:1px solid #b1b1b1;padding:0 0 5px;font:11px 'Times New Roman',serif;color:#666}.utility a{margin-right:12px}.masthead{display:flex;align-items:center;gap:25px;padding:17px 0 14px}.retro-logo{color:#07397e;font:bold 48px/1 Georgia,'Times New Roman',serif;letter-spacing:-3px;white-space:nowrap}.retro-logo em{font-style:normal;color:#e9831a}.retro-logo small{display:block;font:10px/1.6 Arial,sans-serif;letter-spacing:3px;text-transform:uppercase;color:#53617b;margin:6px 0 0 3px}.retro-emblem{display:inline-block;border:3px double #244c84;padding:2px 8px;margin-right:7px;font:bold 37px Georgia;vertical-align:3px;letter-spacing:-3px}.banner{margin-left:auto;max-width:440px;flex:1;border:1px solid #7494bb;background:linear-gradient(#f5faff,#d5e4f3);padding:10px 17px;min-height:66px;color:#1b437a;position:relative}.banner:after{content:'>>';position:absolute;right:13px;top:9px;font:bold 36px Georgia;color:#89a6cc}.banner strong{display:block;font:bold 20px Georgia}.banner small{font-size:11px}.portal-menu{background:linear-gradient(#6589b7,#1d467e);border:1px solid #173668;display:flex;align-items:center;justify-content:space-between;padding:0 5px}.portal-menu button{background:none;color:#fff;border:0;border-right:1px solid #829bbe;padding:8px 18px;text-decoration:underline;font:bold 12px Arial}.portal-menu button:hover{background:#12386c}.connection{font:11px 'Courier New',monospace;color:#fff;padding:0 9px}.connection i{display:inline-block;width:6px;height:6px;background:#c9e5a6;margin-right:5px}.ticker{display:flex;border:1px solid #c1c8d0;border-top:0;padding:5px 9px;background:#f4f5f7;font:11px Arial;color:#555;gap:12px}.ticker b{color:#234b81}.ticker span:last-child{margin-left:auto;color:#7c613c}.demo-strip{margin:12px 0 10px;background:#fff9df;border:1px solid #dbc894;padding:6px 10px;font:11px/1.5 Arial;color:#6c5b32}.auth{min-height:0;background:none;display:grid;grid-template-columns:245px minmax(0,1fr);gap:14px;align-items:start}.auth-art{display:block;min-height:0;padding:0;grid-column:2;grid-row:1}.auth-panel{display:block;padding:0;grid-column:1;grid-row:1}.auth-box{width:100%;padding:0;border:1px solid #8d9eb5;box-shadow:none;background:#f1f3f7}.auth-box h2{font:bold 14px Arial;letter-spacing:0;color:#fff;background:linear-gradient(#7395be,#365d90);padding:6px 9px;margin:0}.auth-box .sub{font:11px Arial;margin:9px 10px;color:#5c6677}.tabs{display:flex;gap:0;padding:0;margin:10px 10px 13px;background:none;border-bottom:1px solid #9aaac0}.tabs button{padding:5px 9px;border:1px solid #a4afbd;border-bottom:0;background:#dddfe5;font-size:11px;color:#333}.tabs button.active{background:#fff;color:#002b75;box-shadow:none;font-weight:bold}.auth-box form{padding:0 12px}.field{margin:12px 0}.field label{font:bold 12px Arial;margin-bottom:5px}.field input{font:13px Arial;padding:5px 6px;min-height:28px;border:1px solid #929ca9;border-top-color:#6b7685;background:#fff;box-shadow:inset 1px 1px 2px #d8d8d8;transition:none}.field input:focus{box-shadow:inset 1px 1px 2px #ddd}.primary,.secondary{background:linear-gradient(#fff,#d2d7df);color:#172d51;padding:6px 12px;border:1px solid #78879d;border-top-color:#b4bdc9;border-left-color:#b4bdc9;font:bold 12px Arial;box-shadow:inset 1px 1px #fff,1px 1px #c9ced7;transition:none}.primary:hover,.secondary:hover{background:linear-gradient(#fff,#bacce5);transform:none;color:#002b75}.auth-box .primary{width:auto;min-width:100px}.message{font-size:11px;margin-top:8px;min-height:16px}.auth-note{text-align:left;color:#677181;border-top:1px solid #c3c9d2;padding:9px 11px;margin:7px 0 0;font-size:10px}.retro-box{border:1px solid #9faec2;background:#fff;margin-bottom:12px}.box-title{background:linear-gradient(#9eb5d2,#7194bf);color:#fff;font:bold 12px Georgia;padding:4px 8px;letter-spacing:.2px}.box-content{padding:11px}.welcome-banner{background:linear-gradient(100deg,#f0f5fb,#fff);border:1px solid #9faec2;border-top:4px solid #284d81;padding:17px 18px;margin-bottom:12px;position:relative}.welcome-banner .eyebrow{font:bold 10px Arial;letter-spacing:2px;color:#637994}.welcome-banner h1{font:normal 30px/1.12 Georgia;color:#153f78;letter-spacing:-1px;margin:7px 0 10px}.welcome-banner p{font:13px/1.5 'Times New Roman',serif;margin:0;max-width:370px}.welcome-banner .open-link{background:#fff4d7;border:1px solid #cfa35b;margin-top:14px;padding:5px 10px;color:#7c4300;text-decoration:underline;font:bold 12px Georgia}.stamp{position:absolute;right:18px;bottom:17px;border:3px double #819ab9;padding:10px 8px;text-align:center;color:#456c9a;font:bold 10px/1.5 'Courier New',monospace;transform:rotate(-7deg)}.portal-columns{display:grid;grid-template-columns:1fr 1fr;gap:12px}.directory{display:grid;grid-template-columns:1fr 1fr;gap:9px 12px;padding:12px}.directory button{background:none;color:#000099;text-decoration:underline;padding:0;border:0;text-align:left;font:13px 'Times New Roman',serif}.directory button:hover{color:#b25500}.directory button small{display:block;text-decoration:none;font:10px/1.4 Arial;color:#69778a;margin-top:3px}.news-item{font:13px/1.4 'Times New Roman',serif;margin-bottom:10px}.news-item:last-child{margin-bottom:0}.news-item small{display:block;font:10px Arial;color:#757575;margin-bottom:3px}.news-item b{color:#234b81;text-decoration:underline;font-weight:normal}.small-print{font:11px/1.6 Arial;color:#666}.web-badges{display:flex;gap:7px;margin-top:12px;flex-wrap:wrap}.web-badge{border:1px solid #8595ac;box-shadow:inset 1px 1px #fff;background:#e4e9f2;color:#2a4672;font:bold 10px/1.3 'Courier New',monospace;padding:4px 8px;text-align:center}.web-badge.orange{background:#fff1d2;color:#805215;border-color:#bda56b}.side .brand{display:none}.app{min-height:0;display:grid;grid-template-columns:185px minmax(0,1fr);gap:14px}.side{padding:0;background:#f0f3f7;border:1px solid #9faec2;display:flex;align-self:start;position:static;height:auto}.side:before{content:'ЛИЧНЫЙ КАБИНЕТ';background:linear-gradient(#88a5cb,#4a6f9d);color:white;font:bold 11px Arial;letter-spacing:.5px;padding:7px 9px}.nav{display:block;padding:5px 9px}.nav button{background:none;color:#000099;text-decoration:underline;display:flex;padding:9px 2px;gap:7px;border-bottom:1px dotted #b6c0cf;width:100%;font:13px 'Times New Roman',serif}.nav button:hover,.nav button.active{background:#dce6f3;color:#003374}.nav svg{width:14px;height:14px}.side-bottom{margin-top:12px;padding:9px;border-top:1px solid #b0bfd4}.user-mini{padding:0;gap:7px;margin-bottom:6px}.avatar{width:25px;height:25px;background:#dde6f2;border:1px solid #9caec7;font:12px Georgia}.user-mini b{font-size:12px}.user-mini small{font:10px Arial;max-width:115px}.logout{color:#000099;text-decoration:underline;padding:5px 0;font:12px 'Times New Roman',serif}.main{padding:0;min-width:0}.topbar{height:auto;min-height:33px;padding:5px 10px;border:1px solid #9faec2;background:linear-gradient(#eff4fa,#d6e1ef)}.topbar h1{font:bold 14px Georgia;letter-spacing:0;color:#234774}.top-actions{gap:6px}.icon-btn{width:24px;height:24px;background:#f4f7fb;border:1px solid #adbacf;border-radius:0}.icon-btn svg{width:15px;height:15px}.content{padding:13px 0;max-width:none}.welcome{margin-bottom:13px;align-items:center}.welcome h2{font:bold 22px Georgia;letter-spacing:-.3px;color:#234774;margin:0 0 4px}.welcome p{font:12px Arial}.date{font:10px Arial;padding:4px 7px;background:#f5f5f5}.grid{grid-template-columns:minmax(0,1.35fr) minmax(220px,1fr);gap:12px}.card{padding:13px;border:1px solid #9faec2;box-shadow:none}.balance-card{min-height:160px;background:linear-gradient(110deg,#e4edf8,#f9fbff);color:#163b73;border:1px solid #829fc1;border-top:4px solid #315a91}.balance-card:after{display:none}.balance-label{opacity:1;font:bold 12px Georgia;border-bottom:1px solid #bacbdf;padding-bottom:7px}.balance{font:bold 35px Georgia;letter-spacing:-1px;margin:17px 0 19px}.balance small{font:20px Georgia}.account-line{opacity:1;font:10px/1.5 'Courier New',monospace;gap:10px;flex-wrap:wrap}.section-head{border-bottom:1px solid #c3cddc;padding-bottom:6px;margin-bottom:10px}.section-head h3{font:bold 13px Georgia;color:#234b81}.link-btn{font:11px 'Times New Roman',serif;text-decoration:underline;color:#000099}.quick{display:grid;grid-template-columns:1fr;gap:0}.quick button{background:none;border-bottom:1px dotted #bcc6d4;display:flex;align-items:center;gap:10px;padding:9px 0;color:#000099;text-align:left;text-decoration:underline}.quick button:last-child{border:0}.quick button:hover{background:#edf2f8}.quick span{font:12px 'Times New Roman',serif}.quick .qicon{font:bold 17px Georgia;display:inline-grid;place-items:center;background:#e6edf7;border:1px solid #a8bad2;width:25px;height:25px;text-decoration:none}.transactions{margin-top:13px}.tx{padding:10px 0;gap:8px;border-bottom:1px dotted #bbc5d3}.tx-icon{width:23px;height:23px;border:1px solid #b2bfd0;font:15px Georgia;background:#edf2f8}.tx-info strong{font:12px Arial}.tx-info small{font:10px Arial}.tx-amount{font:bold 12px Arial}.positive{color:#1f643e}.negative{color:#343434}.notice{margin-top:12px;padding:9px;background:#fff9e1;border:1px solid #d6c99a;font:11px/1.5 Arial}.profile-form{max-width:490px}.modal-back{background:#14213e88}.modal{padding:0 14px 14px;border:2px outset #dce4f0;background:#f0f3f8;box-shadow:4px 5px 0 #182c4366}.modal h3{background:linear-gradient(90deg,#20457e,#88a8d0);color:#fff;margin:0 -14px 13px;padding:5px 8px;font:bold 13px Arial}.modal p{font:12px Arial}.modal-actions{margin-top:12px}.toast{border:1px solid #7f94b0;border-radius:0;background:#ffffe7;color:#243f68;font:12px Arial;box-shadow:2px 2px 0 #bbc2ce;padding:10px 14px}.empty{font:12px Arial}.portal-footer{margin-top:18px;border-top:3px double #acb8c9;padding:10px 0 15px;display:flex;justify-content:space-between;gap:15px;font:11px/1.7 'Times New Roman',serif;color:#666}.portal-footer b{color:#29456d}.footer-right{text-align:right}.footer-right span{font:10px 'Courier New',monospace;border:1px solid #b7bec8;padding:3px 7px;display:inline-block;background:#f0f2f5}.footer-right p{margin:5px 0 0}
-@media(min-width:901px){.auth-art{display:block}}@media(max-width:900px){.auth{grid-template-columns:230px minmax(0,1fr)}.auth-art{display:block}.app{grid-template-columns:165px minmax(0,1fr)}.side{position:static;height:auto;padding:0;left:auto;right:auto;bottom:auto}.side-bottom{display:block}.nav{display:block}.nav button{display:flex;justify-items:start;font-size:13px}.nav svg{width:14px}.main{padding:0}.content{padding:12px 0}.topbar{height:auto}.welcome{flex-direction:row}.date{display:none}.grid{grid-template-columns:1fr}.stamp{display:none}.banner{max-width:340px}}@media(max-width:640px){body{padding:8px}.utility{font-size:10px}.utility span{display:none}.masthead{gap:10px;padding:15px 0}.retro-logo{font-size:36px;letter-spacing:-2px}.retro-logo small{font-size:8px;letter-spacing:2px}.retro-emblem{font-size:26px;padding:2px 6px;vertical-align:2px}.banner{padding:6px 9px;min-height:50px}.banner strong{font-size:14px}.banner small{font-size:9px}.banner:after{display:none}.portal-menu button{padding:7px 8px;font-size:11px}.connection{display:none}.ticker{font-size:10px}.ticker span:last-child{display:none}.auth{grid-template-columns:1fr}.auth-panel{grid-column:1;grid-row:1}.auth-art{grid-column:1;grid-row:2}.auth-box form{max-width:350px}.auth-box h2{font-size:13px}.auth-box .sub{margin-bottom:0}.tabs{margin-bottom:5px}.auth-note{font-size:10px}.welcome-banner h1{font-size:25px}.portal-columns{gap:10px}.app{grid-template-columns:1fr;gap:10px}.side:before,.user-mini{display:none}.side{display:block}.nav{display:flex;gap:0;padding:0}.nav button{padding:7px 10px;width:auto;flex:1;border-bottom:0;border-right:1px solid #b7c6db;justify-content:center}.side-bottom{margin:0;padding:3px 8px;border-top:1px solid #c0cad7;text-align:right}.logout{padding:2px;font-size:11px}.balance{font-size:32px}.card{padding:12px}.welcome h2{font-size:20px}.portal-footer{font-size:10px}.footer-right{max-width:130px}.stamp{display:none}.toast{right:10px;bottom:10px;max-width:calc(100% - 20px)}}
-/* Карта ЗАТО-87 */
-.card-showcase{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(220px,1fr);gap:15px}.zato-card{max-width:420px;min-height:228px;aspect-ratio:1.65;border:1px solid #274c7a;border-radius:12px;padding:21px;color:#fff;background:repeating-linear-gradient(125deg,transparent 0 17px,#ffffff05 18px 19px),linear-gradient(120deg,#112c50,#426d9a 62%,#193c65);position:relative;box-shadow:2px 3px 0 #b5c1cf;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between}.zato-card:after{content:'87';position:absolute;right:12px;top:30px;font:bold 135px/1 Georgia;color:#ffffff0c;pointer-events:none}.zato-card.frozen{filter:grayscale(1)}.zato-card-top,.zato-card-bottom{display:flex;justify-content:space-between;align-items:center;gap:10px;z-index:1}.zato-card-top strong{font:bold 22px Georgia}.zato-card-top small{font:10px/1.4 Arial;text-align:right;color:#d9e5f5}.retro-chip{width:38px;height:28px;border:1px solid #af9455;border-radius:5px;background:linear-gradient(45deg,#a88b49,#f3df9f,#c3aa6b);position:relative;margin:12px 0}.retro-chip:before{content:'';position:absolute;inset:7px 0;border-top:1px solid #8e7b4c;border-bottom:1px solid #8e7b4c}.retro-chip:after{content:'';position:absolute;inset:0 10px;border-left:1px solid #8e7b4c;border-right:1px solid #8e7b4c}.zato-card-number{font:18px 'Courier New',monospace;letter-spacing:1px;z-index:1;overflow-wrap:anywhere}.zato-card-bottom{font:11px 'Courier New',monospace;margin-top:12px}.card-status{display:inline-block;font:11px Arial;padding:3px 6px;border:1px solid #95b49f;background:#eef8f0;color:#28563b}.card-status.blocked{border-color:#c69d9d;color:#923939;background:#fff0ed}.card-controls{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.card-controls button{width:auto}.detail-table{width:100%;border-collapse:collapse;font-size:12px}.detail-table td{padding:9px 3px;border-bottom:1px dotted #bdc9d8;vertical-align:top
-:first-child{color:#6d7887;width:45%}.toolbar{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:8px}.toolbar input,.toolbar select{font:12px Arial;border:1px solid #9eafc5;padding:5px;max-width:100%;background:white}.toolbar input{min-width:0;flex:1}.toolbar button{width:auto}.password-toggle{background:transparent;color:#000099;text-decoration:underline;font:10px Arial;padding:4px 0}.session-note{font:10px Arial;color:#67758a;margin-top:12px}.receipt-line{padding:8px 0;border-bottom:1px dotted #b5bfd0;display:flex;justify-content:space-between;gap:15px}.receipt-line strong{overflow-wrap:anywhere;text-align:right}.modal-back{overflow:auto}.modal{max-height:90vh;overflow:auto}.modal[role=dialog]:focus{outline:none}.tx-info small{overflow-wrap:anywhere}.security-box{margin-top:15px}.page-notice{font:11px/1.6 Arial;color:#6c7685;margin:12px 0}.danger-text{color:#9d3434}.balance-toggle{float:right;font:10px Arial;background:transparent;color:#234b81;text-decoration:underline}.balance-toggle:hover{color:#000099}input:disabled{color:#52657e;background:#edf1f6}.nav{flex-wrap:wrap}.portal-footer .footer-right{flex-shrink:0}@media(max-width:640px){.card-showcase{grid-template-columns:1fr}.zato-card{width:100%}.demo-strip{padding:9px;gap:8px}.restriction-seal{font-size:11px;padding:5px}.nav button{font-size:12px;padding:8px 5px;min-width:65px}.welcome h2{overflow-wrap:anywhere}.portal-columns{grid-template-columns:1fr}.portal-footer{flex-wrap:wrap}.footer-right{text-align:left;max-width:none}}@media print{.side,.portal-menu,.utility,.top-actions,.card-controls,.toolbar,.quick,.modal-back,.toast,.auth{display:none!important}.app{display:block}.page{display:block!important}.page-profile,.page-cards{break-before:page}body{padding:0}.portal-shell{width:100%}.zato-card{print-color-adjust:exact}}
-/* Блок правил */
-.demo-strip.transfer-policy{display:flex;align-items:flex-start;gap:16px;margin:14px 0 16px;padding:17px 18px;border:1px solid #9aafca;border-left:5px solid #284e80;background:linear-gradient(110deg,#eaf1f9 0%,#f8fafd 55%,#fff 100%);box-shadow:inset 0 1px 0 #fff,0 2px 0 #e6ebf1;color:#36475d}.policy-emblem{flex:0 0 65px;min-height:86px;border:3px double #6c88aa;background:linear-gradient(#fff,#e0eaf6);color:#274e7e;text-align:center;padding:7px 3px;font-family:Georgia,'Times New Roman',serif;box-shadow:2px 2px 0 #d7e0ec}.policy-emblem span{display:block;font-size:12px;font-weight:bold;letter-spacing:1px}.policy-emblem b{display:block;font-size:30px;line-height:1.1}.policy-emblem i{display:block;border-top:1px solid #acbfd6;margin:5px 3px 0;padding-top:4px;font:normal 8px Arial;letter-spacing:2px}.policy-content{min-width:0;flex:1}.policy-heading{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:7px}.policy-kicker{color:#637992;font:bold 9px Arial;letter-spacing:1.5px}.policy-tag{padding:3px 6px;border:1px solid #b5c4d7;background:#edf2f8;color:#456489;font:bold 9px Arial;letter-spacing:.5px}.transfer-policy strong{font:bold 19px/1.25 Georgia,'Times New Roman',serif;color:#1e4474;margin:0 0 8px}.policy-description{font:12px/1.65 Arial;margin:0;color:#3c4e66}.policy-warning{display:flex;align-items:flex-start;gap:9px;border:1px solid #ddc99d;border-left:3px solid #b18b43;background:linear-gradient(90deg,#fff7e4,#fffdf7);padding:10px 11px;margin-top:12px;color:#6b5533}.policy-warning-icon{flex:0 0 18px;height:18px;border:1px solid #b3955a;background:#f6e6bd;text-align:center;font:bold 14px Georgia;color:#805e20}.policy-warning b{display:block;font:bold 11px Arial;color:#775820;margin-bottom:4px}.policy-warning p{margin:0;font:11px/1.6 Arial}.transfer-policy small.policy-footnote{font:10px/1.5 Arial;color:#778392;margin-top:9px;padding-top:7px;border-top:1px dotted #bccada}@media(max-width:640px){.demo-strip.transfer-policy{padding:12px 10px;gap:10px}.policy-emblem{flex-basis:49px;min-height:72px}.policy-emblem b{font-size:24px}.policy-emblem span{font-size:10px}.transfer-policy strong{font-size:17px}.policy-kicker{font-size:8px;letter-spacing:.8px}.policy-tag{font-size:8px}.policy-warning{padding:8px;gap:7px}}@media(max-width:380px){.policy-emblem{display:none}}
-/* Статус сервиса */
-.service-status{border-left:4px solid #284e80;background:linear-gradient(90deg,#eef3f9,#fff);font:11px/1.65 Arial;color:#3a4b61}
-.service-status b{display:block;font:bold 12px Georgia;color:#1e4474;margin-bottom:5px;letter-spacing:.2px}
-/* Администрация */
-.adm-head{display:flex;justify-content:space-between;align-items:flex-end;gap:15px;flex-wrap:wrap;border-bottom:2px solid #315a91;padding-bottom:10px;margin-bottom:14px}
-.adm-head h2{font:bold 24px Georgia;color:#234774;margin:0 0 4px;letter-spacing:-.3px}
-.adm-head p{font:12px Arial;color:#667080;margin:0}
-.adm-badge{display:inline-block;vertical-align:middle;margin-left:8px;padding:3px 8px;border:1px solid #b58b8b;background:#fff0ed;color:#8c2d2d;font:bold 10px Arial;letter-spacing:.7px}
-.adm-role{display:inline-block;padding:2px 7px;border:1px solid #9aafca;background:#eef3f9;color:#274e7e;font:bold 10px Arial}
-.adm-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:14px}
-.adm-stat{border:1px solid #9faec2;background:linear-gradient(#f5f8fc,#e6edf6);padding:11px 13px}
-.adm-stat small{display:block;font:10px Arial;color:#667080;text-transform:uppercase;letter-spacing:.6px}
-.adm-stat b{display:block;font:bold 22px Georgia;color:#1e4474;margin-top:5px;letter-spacing:-.5px}
-.adm-card{border:1px solid #9faec2;background:#fff;margin-bottom:14px}
-.adm-card-title{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;background:linear-gradient(#9eb5d2,#7194bf);color:#fff;padding:6px 10px;font:bold 12px Georgia;letter-spacing:.2px}
-.adm-card-title .adm-count{font:bold 10px Arial;background:#ffffff22;border:1px solid #ffffff55;padding:2px 7px}
-.adm-card-body{padding:11px}
-.adm-toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
-.adm-toolbar input,.adm-toolbar select{font:12px Arial;border:1px solid #9eafc5;padding:5px 6px;background:#fff;min-height:28px}
-.adm-toolbar input{flex:1;min-width:150px}
-.adm-btn{background:linear-gradient(#fff,#d2d7df);border:1px solid #78879d;border-top-color:#b4bdc9;border-left-color:#b4bdc9;color:#172d51;font:bold 11px Arial;padding:5px 10px;cursor:pointer;box-shadow:inset 1px 1px #fff,1px 1px #c9ced7;white-space:nowrap}
-.adm-btn:hover{background:linear-gradient(#fff,#bacce5);color:#002b75}
-.adm-btn.primary{background:linear-gradient(#4a7ab5,#1d467e);color:#fff;border-color:#173668}
-.adm-btn.primary:hover{background:linear-gradient(#5a8ac5,#274e86)}
-.adm-btn.danger{color:#8c2d2d;border-color:#b58b8b}
-.adm-btn.danger:hover{background:linear-gradient(#fff,#e8c9c9)}
-.adm-btn:disabled{opacity:.5;cursor:not-allowed}
-.adm-table-wrap{overflow-x:auto;border:1px solid #c3cddc}
-.adm-table{width:100%;border-collapse:collapse;font:12px Arial;min-width:780px}
-.adm-table th{background:linear-gradient(#dde6f2,#c3d1e4);color:#234b81;text-align:left;padding:7px 8px;font:bold 11px Arial;border-bottom:1px solid #9faec2;white-space:nowrap}
-.adm-table td{padding:7px 8px;border-bottom:1px dotted #bdc9d8;vertical-align:middle}
-.adm-table tr:hover td{background:#f3f7fc}
-.adm-table tr:last-child td{border-bottom:0}
-.adm-table .num{text-align:right;font-family:'Courier New',monospace;white-space:nowrap}
-.adm-table .login-cell{font-family:'Courier New',monospace;font-weight:bold;color:#1e4474}
-.adm-table .adm-row-actions{display:flex;gap:4px;flex-wrap:wrap}
-.adm-table .adm-row-actions button{font:bold 10px Arial;padding:3px 6px;background:linear-gradient(#fff,#dde3ec);border:1px solid #9aaac0;color:#234774;cursor:pointer}
-.adm-table .adm-row-actions button:hover{background:linear-gradient(#fff,#bacce5);color:#002b75}
-.adm-table .adm-row-actions button.danger{color:#8c2d2d;border-color:#b58b8b}
-.adm-table .adm-row-actions button.danger:hover{background:linear-gradient(#fff,#e8c9c9)}
-.adm-empty{padding:18px;text-align:center;color:#667080;font:12px Arial}
-.adm-log{max-height:400px;overflow:auto;font:11px/1.5 Arial}
-.adm-log-row{display:flex;gap:10px;padding:6px 8px;border-bottom:1px dotted #bdc9d8;align-items:flex-start}
-.adm-log-row:last-child{border-bottom:0}
-.adm-log-row:hover{background:#f3f7fc}
-.adm-log-row time{flex:0 0 128px;color:#7a8698;font-family:'Courier New',monospace}
-.adm-log-row .who{flex:0 0 90px;color:#274e7e;font-weight:bold;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.adm-log-row .what{flex:1;min-width:0;overflow-wrap:anywhere}
-.adm-log-row .what b{color:#234b81}
-.adm-log-row .amt{flex:0 0 95px;text-align:right;font-family:'Courier New',monospace;font-weight:bold;white-space:nowrap}
-.adm-log-row .amt.in{color:#1f643e}
-.adm-log-row .amt.out{color:#8c2d2d}
-.adm-audit .adm-log-row time{flex:0 0 128px}
-.adm-audit .adm-log-row .who{flex:0 0 80px}
-.adm-audit .adm-log-row .what em{color:#8c2d2d;font-style:normal;font-weight:bold}
-.adm-user-detail{border:1px solid #c3cddc;background:#f7fafd;padding:11px;margin-bottom:10px}
-.adm-user-detail .adm-ud-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;border-bottom:1px solid #c3cddc;padding-bottom:6px;margin-bottom:8px}
-.adm-user-detail .adm-ud-head b{font:bold 13px Georgia;color:#234b81}
-.adm-user-detail dl{display:grid;grid-template-columns:130px 1fr;gap:4px 10px;margin:0;font:11px Arial}
-.adm-user-detail dt{color:#667080}
-.adm-user-detail dd{margin:0;color:#1d2434;overflow-wrap:anywhere}
-.adm-confirm-back{position:fixed;inset:0;background:#14213e88;display:grid;place-items:center;padding:20px;z-index:40}
-.adm-confirm{width:min(460px,100%);background:#f0f3f8;border:2px outset #dce4f0;box-shadow:4px 5px 0 #182c4366}
-.adm-confirm h3{background:linear-gradient(90deg,#20457e,#88a8d0);color:#fff;margin:0;padding:6px 10px;font:bold 13px Arial}
-.adm-confirm .body{padding:14px}
-.adm-confirm .body p{font:12px/1.55 Arial;margin:0 0 10px;color:#33445c}
-.adm-confirm .body .target{background:#fff;border:1px solid #c3cddc;padding:8px 10px;font:11px/1.5 'Courier New',monospace;color:#1e4474;margin-bottom:10px;overflow-wrap:anywhere}
-.adm-confirm .body label{display:block;font:bold 11px Arial;margin:8px 0 4px;color:#33445c}
-.adm-confirm .body input{width:100%;font:13px Arial;padding:6px;border:1px solid #929ca9;box-shadow:inset 1px 1px 2px #d8d8d8;background:#fff}
-.adm-confirm .foot{display:flex;gap:8px;padding:0 14px 14px}
-.adm-confirm .foot button{flex:1;padding:7px 12px;font:bold 12px Arial;cursor:pointer;border:1px solid #78879d;background:linear-gradient(#fff,#d2d7df);color:#172d51;box-shadow:inset 1px 1px #fff}
-.adm-confirm .foot button.ok{background:linear-gradient(#4a7ab5,#1d467e);color:#fff;border-color:#173668}
-.adm-confirm .foot button.ok.danger{background:linear-gradient(#a04545,#6d1f1f);border-color:#5a1616}
-.adm-confirm .err{color:#8c2d2d;font:11px Arial;padding:0 14px 10px;min-height:14px}
-@media(max-width:640px){.adm-stats{grid-template-columns:1fr 1fr}.adm-log-row{flex-wrap:wrap;gap:4px}.adm-log-row time{flex:0 0 auto}.adm-log-row .who{flex:0 0 auto}.adm-log-row .amt{flex:0 0 auto}.adm-user-detail dl{grid-template-columns:1fr}.adm-user-detail dt{font-weight:bold;margin-top:5px}}
-/* Эмуляция окна браузера 90-х */
-body{background-color:#008080;padding:20px;display:flex;justify-content:center;align-items:center;min-height:100vh}
-.portal-shell{background:#fff;border:2px outset #dfdfdf;box-shadow:5px 5px 0 rgba(0,0,0,0.5);width:100%;max-width:1100px;height:90vh;overflow-y:scroll;padding:10px;position:relative}
-.portal-shell::-webkit-scrollbar{width:16px;background:#dfdfdf}
-.portal-shell::-webkit-scrollbar-thumb{background:#c0c0c0;border:2px outset #dfdfdf}
-.portal-shell::-webkit-scrollbar-button{background:#c0c0c0;border:2px outset #dfdfdf;height:16px}
-.portal-shell::before{content:"ЗАТО-Банк - Netscape Navigator";display:block;background:linear-gradient(90deg,#000080,#1084d0);color:white;padding:5px 10px;font-family:'MS Sans Serif',Arial,sans-serif;font-size:14px;font-weight:bold;margin:-10px -10px 10px -10px;border-bottom:2px solid #000}
+/* ===== БАЗОВЫЕ СТИЛИ ===== */
+:root {
+  --green: #1d6fa5; --green2: #0b4f7a; --mint: #e8f2f8;
+  --ink: #183344; --muted: #667984; --line: #b8cbd6;
+  --bg: #fff; --danger: #a93245;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 0; background: #fff; color: #222;
+  font: 13px/1.4 Arial, Helvetica, sans-serif;
+}
+a { color: #000099; text-decoration: underline; }
+button { cursor: pointer; border: 0; font: 13px Arial, sans-serif; }
+button:focus-visible, a:focus-visible { outline: 2px dotted #d66c00; outline-offset: 3px; }
+input:focus { outline: 1px solid #486aa3 !important; }
+button, input, .card, .auth-box, .modal, .avatar, .tabs, .notice, .date, .tx-icon { border-radius: 0 !important; }
+
+/* ===== РЕТРО-ОБОЛОЧКА ===== */
+.portal-shell { width: min(980px, 100%); margin: 0 auto; padding: 14px 18px; }
+.utility { display: flex; justify-content: space-between; border-bottom: 1px solid #b1b1b1; padding: 0 0 5px; font: 11px 'Times New Roman', serif; color: #666; }
+.utility a { margin-right: 12px; }
+.masthead { display: flex; align-items: center; gap: 25px; padding: 17px 0 14px; }
+.retro-logo { color: #07397e; font: bold 48px/1 Georgia, 'Times New Roman', serif; letter-spacing: -3px; white-space: nowrap; }
+.retro-logo em { font-style: normal; color: #e9831a; }
+.retro-logo small { display: block; font: 10px/1.6 Arial, sans-serif; letter-spacing: 3px; text-transform: uppercase; color: #53617b; margin: 6px 0 0 3px; }
+.retro-emblem { display: inline-block; border: 3px double #244c84; padding: 2px 8px; margin-right: 7px; font: bold 37px Georgia; vertical-align: 3px; letter-spacing: -3px; }
+.banner { margin-left: auto; max-width: 440px; flex: 1; border: 1px solid #7494bb; background: linear-gradient(#f5faff, #d5e4f3); padding: 10px 17px; min-height: 66px; color: #1b437a; position: relative; }
+.banner strong { display: block; font: bold 20px Georgia; }
+.banner small { font-size: 11px; }
+.portal-menu { background: linear-gradient(#6589b7, #1d467e); border: 1px solid #173668; display: flex; align-items: center; justify-content: space-between; padding: 0 5px; }
+.portal-menu button { background: none; color: #fff; border-right: 1px solid #829bbe; padding: 8px 18px; text-decoration: underline; font: bold 12px Arial; }
+.portal-menu button:hover { background: #12386c; }
+.connection { font: 11px 'Courier New', monospace; color: #fff; padding: 0 9px; }
+.connection i { display: inline-block; width: 6px; height: 6px; background: #c9e5a6; margin-right: 5px; }
+.ticker { display: flex; border: 1px solid #c1c8d0; border-top: 0; padding: 5px 9px; background: #f4f5f7; font: 11px Arial; color: #555; gap: 12px; }
+.ticker b { color: #234b81; }
+.ticker span:last-child { margin-left: auto; color: #7c613c; }
+
+/* ===== БЛОКИ ИНФОРМАЦИИ ===== */
+.demo-strip { margin: 12px 0 10px; background: #fff9df; border: 1px solid #dbc894; padding: 6px 10px; font: 11px/1.5 Arial; color: #6c5b32; }
+.transfer-policy { display: flex; align-items: flex-start; gap: 16px; margin: 14px 0 16px; padding: 17px 18px; border: 1px solid #9aafca; border-left: 5px solid #284e80; background: linear-gradient(110deg, #eaf1f9, #f8fafd 55%, #fff); }
+.policy-emblem { flex: 0 0 65px; min-height: 86px; border: 3px double #6c88aa; background: linear-gradient(#fff, #e0eaf6); color: #274e7e; text-align: center; padding: 7px 3px; font-family: Georgia, serif; }
+.policy-emblem span { display: block; font-size: 12px; font-weight: bold; letter-spacing: 1px; }
+.policy-emblem b { display: block; font-size: 30px; line-height: 1.1; }
+.policy-emblem i { display: block; border-top: 1px solid #acbfd6; margin: 5px 3px 0; padding-top: 4px; font: normal 8px Arial; letter-spacing: 2px; }
+.policy-content { min-width: 0; flex: 1; }
+.policy-heading { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 7px; }
+.policy-kicker { color: #637992; font: bold 9px Arial; letter-spacing: 1.5px; }
+.policy-tag { padding: 3px 6px; border: 1px solid #b5c4d7; background: #edf2f8; color: #456489; font: bold 9px Arial; }
+.transfer-policy strong { font: bold 19px/1.25 Georgia, serif; color: #1e4474; margin: 0 0 8px; display: block; }
+.policy-description { font: 12px/1.65 Arial; margin: 0; color: #3c4e66; }
+.policy-warning { display: flex; align-items: flex-start; gap: 9px; border: 1px solid #ddc99d; border-left: 3px solid #b18b43; background: linear-gradient(90deg, #fff7e4, #fffdf7); padding: 10px 11px; margin-top: 12px; color: #6b5533; }
+.policy-warning-icon { flex: 0 0 18px; height: 18px; border: 1px solid #b3955a; background: #f6e6bd; text-align: center; font: bold 14px Georgia; color: #805e20; }
+.policy-warning b { display: block; font: bold 11px Arial; color: #775820; margin-bottom: 4px; }
+.policy-warning p { margin: 0; font: 11px/1.6 Arial; }
+.policy-footnote { font: 10px/1.5 Arial; color: #778392; margin-top: 9px; padding-top: 7px; border-top: 1px dotted #bccada; display: block; }
+.service-status { border-left: 4px solid #284e80; background: linear-gradient(90deg, #eef3f9, #fff); font: 11px/1.65 Arial; color: #3a4b61; padding: 11px; margin: 0 0 14px; }
+.service-status b { display: block; font: bold 12px Georgia; color: #1e4474; margin-bottom: 5px; }
+
+/* ===== ФОРМА ВХОДА ===== */
+.auth { display: grid; grid-template-columns: 245px minmax(0, 1fr); gap: 14px; align-items: start; }
+.auth-art { grid-column: 2; grid-row: 1; display: block; }
+.auth-panel { grid-column: 1; grid-row: 1; display: block; }
+.auth-box { width: 100%; padding: 0; border: 1px solid #8d9eb5; background: #f1f3f7; }
+.auth-box h2 { font: bold 14px Arial; color: #fff; background: linear-gradient(#7395be, #365d90); padding: 6px 9px; margin: 0; }
+.auth-box .sub { font: 11px Arial; margin: 9px 10px; color: #5c6677; }
+.tabs { display: flex; gap: 0; padding: 0; margin: 10px 10px 13px; border-bottom: 1px solid #9aaac0; }
+.tabs button { padding: 5px 9px; border: 1px solid #a4afbd; border-bottom: 0; background: #dddfe5; font-size: 11px; color: #333; }
+.tabs button.active { background: #fff; color: #002b75; font-weight: bold; }
+.auth-box form { padding: 0 12px; }
+.field { margin: 12px 0; }
+.field label { display: block; font: bold 12px Arial; margin-bottom: 5px; }
+.field input { width: 100%; font: 13px Arial; padding: 5px 6px; min-height: 28px; border: 1px solid #929ca9; border-top-color: #6b7685; background: #fff; box-shadow: inset 1px 1px 2px #d8d8d8; }
+.primary, .secondary { background: linear-gradient(#fff, #d2d7df); color: #172d51; padding: 6px 12px; border: 1px solid #78879d; border-top-color: #b4bdc9; border-left-color: #b4bdc9; font: bold 12px Arial; box-shadow: inset 1px 1px #fff, 1px 1px #c9ced7; }
+.primary:hover, .secondary:hover { background: linear-gradient(#fff, #bacce5); color: #002b75; }
+.auth-box .primary { width: auto; min-width: 100px; }
+.message { font-size: 11px; margin-top: 8px; min-height: 16px; color: #a93245; }
+.auth-note { text-align: left; color: #677181; border-top: 1px solid #c3c9d2; padding: 9px 11px; margin: 7px 0 0; font-size: 10px; }
+
+/* ===== ДЕКОРАТИВНЫЕ БЛОКИ ВХОДА ===== */
+.welcome-banner { background: linear-gradient(100deg, #f0f5fb, #fff); border: 1px solid #9faec2; border-top: 4px solid #284d81; padding: 17px 18px; margin-bottom: 12px; position: relative; }
+.welcome-banner .eyebrow { font: bold 10px Arial; letter-spacing: 2px; color: #637994; }
+.welcome-banner h1 { font: normal 30px/1.12 Georgia; color: #153f78; letter-spacing: -1px; margin: 7px 0 10px; }
+.welcome-banner p { font: 13px/1.5 'Times New Roman', serif; margin: 0; max-width: 370px; }
+.welcome-banner .open-link { background: #fff4d7; border: 1px solid #cfa35b; margin-top: 14px; padding: 5px 10px; color: #7c4300; text-decoration: underline; font: bold 12px Georgia; }
+.stamp { position: absolute; right: 18px; bottom: 17px; border: 3px double #819ab9; padding: 10px 8px; text-align: center; color: #456c9a; font: bold 10px/1.5 'Courier New', monospace; transform: rotate(-7deg); }
+.portal-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.retro-box { border: 1px solid #9faec2; background: #fff; margin-bottom: 12px; }
+.box-title { background: linear-gradient(#9eb5d2, #7194bf); color: #fff; font: bold 12px Georgia; padding: 4px 8px; }
+.box-content { padding: 11px; }
+.directory { display: grid; grid-template-columns: 1fr 1fr; gap: 9px 12px; padding: 12px; }
+.directory button { background: none; color: #000099; text-decoration: underline; padding: 0; text-align: left; font: 13px 'Times New Roman', serif; }
+.directory button small { display: block; text-decoration: none; font: 10px Arial; color: #69778a; margin-top: 3px; }
+.news-item { font: 13px/1.4 'Times New Roman', serif; margin-bottom: 10px; }
+.news-item small { display: block; font: 10px Arial; color: #757575; margin-bottom: 3px; }
+.news-item b { color: #234b81; text-decoration: underline; font-weight: normal; }
+.small-print { font: 11px/1.6 Arial; color: #666; }
+.web-badges { display: flex; gap: 7px; margin-top: 12px; flex-wrap: wrap; }
+.web-badge { border: 1px solid #8595ac; background: #e4e9f2; color: #2a4672; font: bold 10px/1.3 'Courier New', monospace; padding: 4px 8px; text-align: center; }
+
+/* ===== ЛИЧНЫЙ КАБИНЕТ ===== */
+.app { display: grid; grid-template-columns: 185px minmax(0, 1fr); gap: 14px; }
+.side { background: #f0f3f7; border: 1px solid #9faec2; display: flex; flex-direction: column; }
+.side:before { content: 'ЛИЧНЫЙ КАБИНЕТ'; background: linear-gradient(#88a5cb, #4a6f9d); color: #fff; font: bold 11px Arial; padding: 7px 9px; }
+.nav { display: block; padding: 5px 9px; }
+.nav button { background: none; color: #000099; text-decoration: underline; display: flex; padding: 9px 2px; gap: 7px; border-bottom: 1px dotted #b6c0cf; width: 100%; font: 13px 'Times New Roman', serif; text-align: left; }
+.nav button:hover, .nav button.active { background: #dce6f3; color: #003374; }
+.side-bottom { margin-top: 12px; padding: 9px; border-top: 1px solid #b0bfd4; }
+.user-mini { display: flex; align-items: center; gap: 7px; margin-bottom: 6px; }
+.avatar { width: 25px; height: 25px; background: #dde6f2; border: 1px solid #9caec7; font: 12px Georgia; display: grid; place-items: center; }
+.user-mini b { font-size: 12px; }
+.user-mini small { font: 10px Arial; max-width: 115px; overflow: hidden; text-overflow: ellipsis; display: block; }
+.logout { color: #000099; text-decoration: underline; padding: 5px 0; font: 12px 'Times New Roman', serif; background: none; }
+
+.main { min-width: 0; }
+.topbar { min-height: 33px; padding: 5px 10px; border: 1px solid #9faec2; background: linear-gradient(#eff4fa, #d6e1ef); display: flex; align-items: center; justify-content: space-between; }
+.topbar h1 { font: bold 14px Georgia; color: #234774; margin: 0; }
+.top-actions { display: flex; gap: 6px; }
+.icon-btn { width: 24px; height: 24px; background: #f4f7fb; border: 1px solid #adbacf; }
+.content { padding: 13px 0; }
+
+/* ===== ЭЛЕМЕНТЫ КАБИНЕТА ===== */
+.page { display: none; }
+.page.active { display: block; }
+.welcome { margin-bottom: 13px; display: flex; align-items: center; justify-content: space-between; }
+.welcome h2 { font: bold 22px Georgia; color: #234774; margin: 0 0 4px; }
+.welcome p { font: 12px Arial; margin: 0; }
+.date { font: 10px Arial; padding: 4px 7px; background: #f5f5f5; border: 1px solid #ddd; }
+.grid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(220px, 1fr); gap: 12px; }
+.card { padding: 13px; border: 1px solid #9faec2; background: #fff; }
+.balance-card { background: linear-gradient(110deg, #e4edf8, #f9fbff); color: #163b73; border-top: 4px solid #315a91; min-height: 160px; }
+.balance-label { font: bold 12px Georgia; border-bottom: 1px solid #bacbdf; padding-bottom: 7px; display: flex; justify-content: space-between; }
+.balance { font: bold 35px Georgia; margin: 17px 0 19px; }
+.balance small { font: 20px Georgia; }
+.account-line { font: 10px/1.5 'Courier New', monospace; display: flex; justify-content: space-between; }
+.balance-toggle { background: transparent; color: #234b81; text-decoration: underline; font-size: 10px; }
+
+.section-head { border-bottom: 1px solid #c3cddc; padding-bottom: 6px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+.section-head h3 { font: bold 13px Georgia; color: #234b81; margin: 0; }
+.quick { display: grid; grid-template-columns: 1fr; gap: 0; }
+.quick button { background: none; border-bottom: 1px dotted #bcc6d4; display: flex; align-items: center; gap: 10px; padding: 9px 0; color: #000099; text-align: left; text-decoration: underline; }
+.quick button:last-child { border: 0; }
+.quick .qicon { font: bold 17px Georgia; display: inline-grid; place-items: center; background: #e6edf7; border: 1px solid #a8bad2; width: 25px; height: 25px; }
+.notice { margin-top: 12px; padding: 9px; background: #fff9e1; border: 1px solid #d6c99a; font: 11px/1.5 Arial; }
+
+/* Транзакции */
+.tx { display: flex; align-items: center; gap: 8px; padding: 10px 0; border-bottom: 1px dotted #bbc5d3; }
+.tx:last-child { border: 0; }
+.tx-icon { width: 23px; height: 23px; border: 1px solid #b2bfd0; font: 15px Georgia; background: #edf2f8; display: grid; place-items: center; }
+.tx-info { flex: 1; min-width: 0; }
+.tx-info strong { font: 12px Arial; display: block; overflow: hidden; text-overflow: ellipsis; }
+.tx-info small { font: 10px Arial; color: #667080; }
+.tx-amount { font: bold 12px Arial; text-align: right; }
+.positive { color: #1f643e; }
+.negative { color: #343434; }
+.empty { font: 12px Arial; color: #667080; padding: 14px 0; }
+
+/* Брокер */
+.broker-disclaimer { border-left: 4px solid #4b91b3; background: #edf6fa; padding: 13px 16px; margin-bottom: 16px; }
+.broker-wallet { padding: 20px; }
+.broker-kicker { display: block; color: #5b8296; font-size: 10px; font-weight: 800; letter-spacing: 1.3px; margin-bottom: 4px; }
+.broker-summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 12px 0 17px; }
+.broker-metric { padding: 14px 15px; border: 1px solid #dce7ec; background: #f4f8fa; }
+.broker-metric small { display: block; color: #6a7f8a; font-size: 11px; margin-bottom: 6px; }
+.broker-metric b { display: block; font-size: 18px; }
+.broker-position-row { display: grid; grid-template-columns: 1.5fr .7fr 1fr 1fr; gap: 10px; padding: 11px 12px; border-bottom: 1px solid #e7eef1; font-size: 13px; }
+.broker-position-row strong, .broker-position-row em { text-align: right; font-weight: 800; font-style: normal; }
+.up { color: #21805b; }
+.down { color: #b34d55; }
+.broker-company-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.broker-company { background: #f7fafb; border: 1px solid #d7e3e9; padding: 16px; }
+.broker-company h4 { font-size: 15px; margin: 12px 0 5px; }
+.broker-quote { border-top: 1px solid #e5edf0; padding: 10px 0; margin-bottom: 11px; }
+.broker-quote strong { font-size: 21px; }
+.broker-transfer-panel { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; background: #f2f7f9; border: 1px solid #dce7ec; padding: 12px; margin: 10px 0 17px; }
+.broker-transfer-panel input { width: 145px; padding: 9px; border: 1px solid #cbd9e0; }
+#tradeForm { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; align-items: end; }
+#tradeForm .field { margin: 6px 0; }
+#tradeForm select, #tradeForm input { width: 100%; padding: 10px; border: 1px solid #cbd9e0; }
+#tradePreview, #tradeForm .primary, #tradeMsg { grid-column: 1 / -1; }
+#tradePreview { background: #f1f7f9; padding: 10px; font-size: 12px; margin: 0; }
+
+/* Карты */
+.card-showcase { display: grid; grid-template-columns: 1.2fr 1fr; gap: 15px; }
+.zato-card { width: 100%; max-width: 420px; aspect-ratio: 1.65; padding: 21px; color: #fff; background: linear-gradient(120deg, #112c50, #426d9a 62%, #193c65); display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden; }
+.zato-card:after { content: '87'; position: absolute; right: 12px; top: 30px; font: bold 135px/1 Georgia; color: rgba(255, 255, 255, 0.05); pointer-events: none; }
+.zato-card.frozen { filter: grayscale(1); }
+.zato-card-number { font: 18px 'Courier New', monospace; letter-spacing: 1px; margin-top: 20px; }
+.card-controls { display: flex; gap: 5px; margin-top: 10px; flex-wrap: wrap; }
+.card-controls button { font-size: 11px; padding: 4px 8px; }
+
+/* Админка */
+.adm-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 15px; border-bottom: 2px solid #315a91; padding-bottom: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+.adm-head h2 { font: bold 24px Georgia; color: #234774; margin: 0 0 4px; }
+.adm-badge { display: inline-block; padding: 3px 8px; border: 1px solid #b58b8b; background: #fff0ed; color: #8c2d2d; font: bold 10px Arial; }
+.adm-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 14px; }
+.adm-stat { border: 1px solid #9faec2; background: #f5f8fc; padding: 11px 13px; }
+.adm-stat small { display: block; font: 10px Arial; color: #667080; text-transform: uppercase; }
+.adm-stat b { display: block; font: bold 22px Georgia; color: #1e4474; margin-top: 5px; }
+.adm-card { border: 1px solid #9faec2; background: #fff; margin-bottom: 14px; }
+.adm-card-title { display: flex; justify-content: space-between; align-items: center; background: linear-gradient(#9eb5d2, #7194bf); color: #fff; padding: 6px 10px; font: bold 12px Georgia; flex-wrap: wrap; }
+.adm-card-body { padding: 11px; }
+.adm-btn { background: linear-gradient(#fff, #d2d7df); border: 1px solid #78879d; color: #172d51; font: bold 11px Arial; padding: 5px 10px; }
+.adm-btn.danger { color: #8c2d2d; border-color: #b58b8b; }
+.adm-table-wrap { overflow-x: auto; border: 1px solid #c3cddc; }
+.adm-table { width: 100%; border-collapse: collapse; font: 12px Arial; min-width: 780px; }
+.adm-table th { background: #dde6f2; color: #234b81; text-align: left; padding: 7px 8px; font: bold 11px Arial; border-bottom: 1px solid #9faec2; }
+.adm-table td { padding: 7px 8px; border-bottom: 1px dotted #bdc9d8; }
+.adm-table .num { text-align: right; font-family: 'Courier New', monospace; }
+.adm-table .login-cell { font-family: 'Courier New', monospace; font-weight: bold; color: #1e4474; }
+.adm-log { max-height: 400px; overflow: auto; font: 11px/1.5 Arial; }
+.adm-log-row { display: flex; gap: 10px; padding: 6px 8px; border-bottom: 1px dotted #bdc9d8; }
+.adm-log-row time { flex: 0 0 128px; color: #7a8698; font-family: 'Courier New', monospace; }
+.adm-log-row .who { flex: 0 0 90px; color: #274e7e; font-weight: bold; }
+.adm-log-row .what { flex: 1; min-width: 0; }
+.adm-log-row .amt { flex: 0 0 95px; text-align: right; font-family: 'Courier New', monospace; font-weight: bold; }
+.adm-log-row .amt.in { color: #1f643e; }
+.adm-log-row .amt.out { color: #8c2d2d; }
+
+/* Модалки */
+.modal-back { position: fixed; inset: 0; background: #14213e88; display: grid; place-items: center; padding: 20px; z-index: 20; }
+.modal { width: min(440px, 100%); background: #f0f3f8; padding: 0 14px 14px; border: 2px outset #dce4f0; box-shadow: 4px 5px 0 #182c4366; max-height: 90vh; overflow: auto; }
+.modal h3 { background: linear-gradient(90deg, #20457e, #88a8d0); color: #fff; margin: 0 -14px 13px; padding: 5px 8px; font: bold 13px Arial; }
+.modal p { font: 12px Arial; }
+.modal-actions { display: flex; gap: 10px; margin-top: 12px; }
+.modal-actions button { flex: 1; }
+.receipt-line { padding: 8px 0; border-bottom: 1px dotted #b5bfd0; display: flex; justify-content: space-between; gap: 15px; font-size: 12px; }
+
+/* Разное */
+.toast { position: fixed; right: 24px; bottom: 24px; background: #ffffe7; color: #243f68; border: 1px solid #7f94b0; font: 12px Arial; box-shadow: 2px 2px 0 #bbc2ce; padding: 10px 14px; transform: translateY(20px); opacity: 0; pointer-events: none; transition: .25s; z-index: 30; }
+.toast.show { transform: none; opacity: 1; }
+.portal-footer { margin-top: 18px; border-top: 3px double #acb8c9; padding: 10px 0 15px; display: flex; justify-content: space-between; gap: 15px; font: 11px/1.7 'Times New Roman', serif; color: #666; }
+.portal-footer b { color: #29456d; }
+.footer-right { text-align: right; }
+.hidden { display: none !important; }
+.profile-form { max-width: 490px; }
+.page-notice { font: 11px/1.6 Arial; color: #6c7685; margin: 12px 0; }
+.security-box { margin-top: 15px; }
+.session-note { font: 10px Arial; color: #67758a; margin-top: 12px; }
+
+@media (max-width: 760px) {
+  .app { grid-template-columns: 1fr; }
+  .side:before { display: none; }
+  .nav { display: flex; flex-wrap: wrap; padding: 0; }
+  .nav button { flex: 1; min-width: 80px; justify-content: center; border-right: 1px solid #b7c6db; border-bottom: 0; }
+  .side-bottom { display: flex; justify-content: space-between; align-items: center; }
+  .grid { grid-template-columns: 1fr; }
+  .broker-summary-grid { grid-template-columns: 1fr 1fr; }
+  .broker-company-grid { grid-template-columns: 1fr; }
+  #tradeForm { grid-template-columns: 1fr; }
+  .card-showcase { grid-template-columns: 1fr; }
+  .auth { grid-template-columns: 1fr; }
+  .auth-art { grid-column: 1; grid-row: 2; }
+  .auth-panel { grid-column: 1; grid-row   }
+  .portal-columns { grid-template-columns: 1fr; }
+  .welcome { flex-direction: column; align-items: flex-start; }
+  .welcome .date { display: none; }
+}
 </style>
 </head>
 <body>
 <div class="portal-shell">
-<div class="utility"><div><a href="#" onclick="window.print();return false">Версия для печати</a><a href="#" onclick="showToast('Добавьте страницу в избранное сочетанием Ctrl+D');return false">В избранное</a></div><span>RUS &nbsp; | &nbsp; WIN-1251 &nbsp; | &nbsp; Интернет-банк 2.0</span></div>
-<header class="masthead"><div class="retro-logo"><span class="retro-emblem">З</span>ЗАТО<em>-Банк</em><small>информационная система обслуживания</small></div><div class="banner"><strong>Ваш счёт — под контролем</strong><small>Внутренние переводы. Единые правила. Без комиссии.</small></div></header>
-<nav class="portal-menu"><div><button type="button" onclick="portalGo('overview')">Главная</button><button type="button" onclick="portalGo('payments')">Переводы</button><button type="button" onclick="portalGo('profile')">Мой счёт</button><button type="button" onclick="showToast('Внутренние операции доступны после входа в систему. Используйте только собственные данные доступа.')">Помощь</button></div><span class="connection"><i></i>Система доступна</span></nav>
-<div class="ticker"><b>ИНТЕРНЕТ-БАНК</b><span>Обслуживание зарегистрированных клиентов • 24 часа в сутки</span><span>Без очередей и перерывов</span></div>
-<section class="demo-strip transfer-policy" aria-labelledby="transferPolicyTitle"><div class="policy-emblem" aria-hidden="true"><span>ЗАТО</span><b>87</b><i>БАНК</i></div><div class="policy-content"><div class="policy-heading"><span class="policy-kicker">ПРАВИЛА ОБСЛУЖИВАНИЯ</span><span class="policy-tag">ВНУТРЕННИЕ ПЕРЕВОДЫ</span></div><strong id="transferPolicyTitle">Переводы — только внутри ЗАТО-Банка</strong><p class="policy-description">Средства на счетах предназначены для расчётов внутри ЗАТО-Банка. Переводы разрешены только между счетами, зарегистрированными в системе. Перечисление средств на счета сторонних банков и платёжных организаций недоступно.</p><div class="policy-warning"><span class="policy-warning-icon" aria-hidden="true">!</span><div><b>Официальное уведомление службы контроля</b><p>Операции проверяются автоматическими средствами безопасности и внутренней службой контроля. Попытки обмана, подделки сведений или обхода установленных ограничений могут привести к приостановке обслуживания и передаче материалов в компетентные органы в порядке, установленном законодательством. Ответственность определяется только уполномоченными органами и судом; одно лишь нарушение внутренних правил не является доказательством состава преступления.</p></div></div><small class="policy-footnote">Интерфейс предназначен для демонстрации локальной системы учёта. Данные сохраняются только в браузере; не вводите реальные банковские реквизиты и пароли.</small></div></section>
-<aside class="notice service-status" aria-label="Статус сервиса" style="margin:0 0 14px"><b>Статус сервиса и порядок рассмотрения обращений</b><br>Настоящий ресурс является демонстрационной информационной системой. Деятельность сервиса осуществляется в соответствии с законодательством Российской Федерации. При выявлении признаков противоправных деяний материалы передаются в правоохранительные органы в порядке, предусмотренном законодательством.</aside>
-<div id="auth" class="auth">
-  <section class="auth-art">
-    <div class="welcome-banner">
-      <div class="eyebrow">ДОБРО ПОЖАЛОВАТЬ В ЗАТО-БАНК</div>
-      <h1>Банк становится ближе.<br>Даже через модем.</h1>
-      <p>Управляйте счётом, отправляйте внутренние переводы и проверяйте выписку. Для входа нужны только логин и пароль.</p>
-      <button class="open-link" type="button" onclick="switchAuth(true);document.querySelector('#regLogin').focus()">Открыть счёт »</button>
-      <div class="stamp">ON-LINE<br>24 / 7<br>ЗАТО-БАНК</div>
-    </div>
-    <div class="portal-columns">
-      <section class="retro-box">
-        <div class="box-title">Каталог услуг</div>
-        <div class="directory">
-          <button onclick="portalGo('profile')">Личный счёт<small>Баланс и реквизиты</small></button>
-          <button onclick="portalGo('payments')">Переводы<small>По логину клиента</small></button>
-          <button onclick="portalGo('overview')">Пополнение<small>Зачисление средств</small></button>
-          <button onclick="portalGo('payments')">Выписка<small>История операций</small></button>
-        </div>
-      </section>
-      <section class="retro-box" style="max-height: 400px; overflow-y: auto;">
-        <div class="box-title">Сводка выживших / Барахолка</div>
-        <div class="box-content" style="padding: 10px;">
-          <div class="news-item" style="margin-bottom: 15px;">
-            <small>ТОРГОВЛЯ / ОРУЖИЕ</small>
-            <b style="display:block; margin-bottom: 5px;">Оружейник Коршун</b>
-            <p style="font-size: 11px; margin: 0; color: #444;">Здравствуй искатель, который просто хочет выжить в этом суровом мире тумана и мутантов! Для твоего взора открывается большой ассортимент всякого оружия разных классов и калибров, Бронежилеты и пластины на любой вкус и цвет, медицина, противогазы и фильтра, а так же множество других товаров! Если же нужного вам товара в наличии не оказалось, можно оформить его под заказ! Оплата при получении. Цены честные и без обмана! Связаться со мной можно любым удобным способом! <br><i>By Коршун</i></p>
-          </div>
-          <div class="news-item" style="margin-bottom: 15px;">
-            <small>ПРОДУКТЫ / КУХНЯ</small>
-            <b style="display:block; margin-bottom: 5px;">Повар А.С. Пескарев</b>
-            <p style="font-size: 11px; margin: 0; color: #444;">Вам предлагается большой Ассортимент готовых блюд кухонь многих стран и национальностей! по вашему желанию вы можете оформить заказ с конкретизацией позиций, либо же выбрать что то из уже готового. на выбор имеется множество охотничьих колбас, овощных рагу, сыров, супов и многого другого. с полным меню вы можете ознакомиться связавшись по адресу отправителя этого сообщения, либо уже при встрече. все детали уточняйте заранее! <br><i>А.С. Пескарев</i></p>
-          </div>
-          <div class="news-item" style="border-top: 1px dashed #ccc; padding-top: 10px;">
-            <small>ТРАНСПОРТ / ОСОБЫЕ ПРЕДЛОЖЕНИЯ</small>
-            <b style="display:block; margin-bottom: 5px;">Автодилер</b>
-            <p style="font-size: 11px; margin: 0; color: #444; font-family: 'Times New Roman', serif;">
-              <b>Greetings, gentlemen.</b> I want to sell my armored car, the <b>“Pitbull”</b>. Price is <b>40 million</b>. For guys who want to buy a car up to 2 million, I can offer my <b>Humvee</b>. Price is <b>1.8 million</b>.<br><br>
-              <b>Приветствую вас, джентльмены.</b> Я хочу продать свой бронеавтомобиль <b>"Питбуль"</b>. Цена - <b>40 миллионов</b>. Для ребят, которые хотят приобрести машину до 2кк, могу предложить Свой <b>Хамви</b>. цена <b>1.8 миллиона</b>.
-            </p>
-          </div>
-        </div>
-      </section>
-    </div>
-    <section class="retro-box">
-      <div class="box-title">Работать с банком через Интернет — просто!</div>
-      <div class="box-content small-print"><b>1.</b> Зарегистрируйте логин и пароль. &nbsp; <b>2.</b> Войдите в кабинет. &nbsp; <b>3.</b> Управляйте своим счётом.</div>
-    </section>
-    <div class="web-badges"><span class="web-badge">ЗАТО-БАНК<br>INTERNET BANKING</span><span class="web-badge orange">0% КОМИССИЯ<br>ВНУТРИ БАНКА</span><span class="web-badge">ЛОГИН + ПАРОЛЬ<br>БЕЗ ЭЛ. ПОЧТЫ</span></div>
-  </section>
-  <section class="auth-panel">
-    <div class="auth-box">
-      <h2 id="authTitle">ВХОД В ИНТЕРНЕТ-БАНК</h2>
-      <p class="sub" id="authSub">Введите ваши учётные данные.</p>
-      <div class="tabs"><button id="loginTab" class="active">Войти</button><button id="registerTab">Регистрация</button></div>
-      <form id="loginForm">
-        <div class="field"><label>Логин</label><input id="loginLogin" type="text" autocomplete="username" placeholder="Введите логин" required></div>
-        <div class="field"><label>Пароль</label><input id="loginPassword" type="password" autocomplete="current-password" placeholder="Введите пароль" required></div>
-        <button class="primary">Войти в кабинет</button>
-        <div class="message" id="loginMsg"></div>
-      </form>
-      <form id="registerForm" class="hidden">
-        <div class="field"><label>Логин</label><input id="regLogin" type="text" autocomplete="username" placeholder="Придумайте логин" required></div>
-        <div class="field"><label>Пароль</label><input id="regPassword" type="password" minlength="6" autocomplete="new-password" placeholder="Не менее 6 символов" required></div>
-        <div class="field"><label>Повторите пароль</label><input id="regRepeat" type="password" minlength="6" autocomplete="new-password" placeholder="Введите пароль ещё раз" required></div>
-        <button class="primary">Создать аккаунт</button>
-        <div class="message" id="regMsg"></div>
-      </form>
-      <p class="auth-note">Аккаунты и операции сохраняются в Firebase (Firestore). Это демонстрационная система.</p>
-      <div style="border-top:1px dotted #b8c4d4;margin-top:10px;padding-top:8px;text-align:center">
-        <button type="button" class="link-btn" id="admLoginBtn" style="font-size:11px">Служебный вход для администратора</button>
-      </div>
+  <div class="utility"><div><a href="#" onclick="window.print();return false">Версия для печати</a><a href="#" onclick="showToast('Добавьте страницу в избранное сочетанием Ctrl+D');return false">В избранное</a></div><span>RUS &nbsp; | &nbsp; WIN-1251 &nbsp; | &nbsp; Интернет-банк 2.0</span></div>
+  <header class="masthead"><div class="retro-logo"><span class="retro-emblem">З</span>ЗАТО<em>-Банк</em><small>информационная система обслуживания</small></div><div class="banner"><strong>Ваш счёт — под контролем</strong><small>Внутренние переводы. Единые правила. Без комиссии.</small></div></header>
+  <nav class="portal-menu"><div><button type="button" onclick="portalGo('overview')">Главная</button><button type="button" onclick="portalGo('payments')">Переводы</button><button type="button" onclick="portalGo('profile')">Мой счёт</button><button type="button" onclick="showToast('Внутренние операции доступны после входа в систему. Используйте только собственные данные доступа.')">Помощь</button></div><span class="connection"><i></i>Система доступна</span></nav>
+  <div class="ticker"><b>ИНТЕРНЕТ-БАНК</b><span>Обслуживание зарегистрированных клиентов • 24 часа в сутки</span><span>Без очередей и перерывов</span></div>
+  
+  <section class="demo-strip transfer-policy" aria-labelledby="transferPolicyTitle">
+    <div class="policy-emblem" aria-hidden="true"><span>ЗАТО</span><b>87</b><i>БАНК</i></div>
+    <div class="policy-content">
+      <div class="policy-heading"><span class="policy-kicker">ПРАВИЛА ОБСЛУЖИВАНИЯ</span><span class="policy-tag">ВНУТРЕННИЕ ПЕРЕВОДЫ</span></div>
+      <strong id="transferPolicyTitle">Переводы — только внутри ЗАТО-Банка</strong>
+      <p class="policy-description">Средства на счетах предназначены для расчётов внутри ЗАТО-Банка. Переводы разрешены только между счетами, зарегистрированными в системе. Перечисление средств на счета сторонних банков и платёжных организаций недоступно.</p>
+      <div class="policy-warning"><span class="policy-warning-icon" aria-hidden="true">!</span><div><b>Официальное уведомление службы контроля</b><p>Операции проверяются автоматическими средствами безопасности и внутренней службой контроля. Попытки обмана, подделки сведений или обхода установленных ограничений могут привести к приостановке обслуживания и передаче материалов в компетентные органы в порядке, установленном законодательством. Ответственность определяется только уполномоченными органами и судом; одно лишь нарушение внутренних правил не является доказательством состава преступления.</p></div></div>
+      <small class="policy-footnote">Интерфейс предназначен для демонстрации локальной системы учёта. Данные сохраняются только в браузере; не вводите реальные банковские реквизиты и пароли.</small>
     </div>
   </section>
-</div>
-<div id="app" class="app hidden">
-  <aside class="side">
-    <div class="brand"><span class="brand-mark"></span><span>ЗАТО-Банк</span></div>
-    <nav class="nav">
-      <button class="active" data-page="overview">Обзор</button>
-      <button data-page="payments">Платежи</button>
-      <button data-page="cards">Карта</button>
-      <button data-page="broker">▥ Брокер</button>
-      <button data-page="cloud">☁ Облако</button>
-      <button data-page="profile">Профиль</button>
-    </nav>
-    <div class="side-bottom">
-      <div class="user-mini"><div class="avatar" id="sideAvatar">З</div><div><b id="sideName">Клиент</b><small id="sideLogin">Логин</small></div></div>
-      <button class="logout" id="logout">↪ Выйти</button>
-    </div>
+  
+  <aside class="service-status" aria-label="Статус сервиса">
+    <b>Статус сервиса и порядок рассмотрения обращений</b><br>
+    Настоящий ресурс является демонстрационной информационной системой. Деятельность сервиса осуществляется в соответствии с законодательством Российской Федерации. При выявлении признаков противоправных деяний материалы передаются в правоохранительные органы в порядке, предусмотренном законодательством.
   </aside>
-  <main class="main">
-    <header class="topbar">
-      <h1 id="pageTitle">Обзор</h1>
-      <div class="top-actions"><button class="icon-btn" id="bell" title="Уведомления">🔔</button><div class="avatar" id="topAvatar">З</div></div>
-    </header>
-    <div class="content">
-      
-      <section class="page active" id="page-overview">
-        <div class="welcome"><div><h2>Добро пожаловать, <span id="welcomeName">Клиент</span>!</h2><p>Состояние вашего счёта и последние операции.</p></div><div class="date" id="currentDate"></div></div>
-        <div class="grid">
-          <div>
-            <div class="card balance-card"><div class="balance-label">Доступный баланс<button class="balance-toggle" id="balanceToggle" type="button">Скрыть</button></div><div class="balance" id="balance">0 <small>₽</small></div><div class="account-line"><span>Личный счёт</span><span id="accountNumber">•••• 0000</span></div></div>
-            <div class="card transactions"><div class="section-head"><h3>Последние операции</h3><button class="link-btn" data-page-go="payments">Все операции</button></div><div id="txList"></div></div>
-          </div>
-          <div>
-            <div class="card"><div class="section-head"><h3>Быстрые действия</h3></div><div class="quick"><button id="topupBtn"><span class="qicon">＋</span><span>Пополнить</span></button><button id="sendBtn"><span class="qicon">↗</span><span>Перевести</span></button><button data-page-go="profile"><span class="qicon">▤</span><span>Реквизиты</span></button></div></div>
-<b>Обратите внимание!</b><br>Для перевода достаточно логина получателя. Комиссия — 0%.</div>
-          </div>
-        </div>
-      </section>
 
-      <section class="page" id="page-payments">
-        <div class="welcome"><div><h2>Платежи и переводы</h2><p>Переводите средства между счетами ЗАТО-Банка.</p></div></div>
-        <div class="grid">
-          <div class="card">
-            <div class="section-head"><h3>Новый перевод</h3></div>
-            <form id="transferForm">
-              <div class="field"><label>Логин получателя</label><input id="recipient" type="text" placeholder="Логин получателя" required></div>
-              <div class="field"><label>Сумма (₽)</label><input id="transferAmount" type="number" min="1" step="1" placeholder="0" required></div>
-              <div class="field"><label>Комментарий</label><input id="transferComment" type="text" maxlength="50" placeholder="Назначение перевода"></div>
-              <button class="primary">Перевести средства</button>
-              <div class="message" id="transferMsg"></div>
+  <div id="auth" class="auth">
+    <section class="auth-art">
+      <div class="welcome-banner">
+        <div class="eyebrow">ДОБРО ПОЖАЛОВАТЬ В ЗАТО-БАНК</div>
+        <h1>Банк становится ближе.<br>Даже через модем.</h1>
+        <p>Управляйте счётом, отправляйте внутренние переводы и проверяйте выписку. Для входа нужны только логин и пароль.</p>
+        <button class="open-link" type="button" onclick="switchAuth(true);document.querySelector('#regLogin').focus()">Открыть счёт »</button>
+        <div class="stamp">ON-LINE<br>24 / 7<br>ЗАТО-БАНК</div>
+      </div>
+      <div class="portal-columns">
+        <section class="retro-box">
+          <div class="box-title">Каталог услуг</div>
+          <div class="directory">
+            <button onclick="portalGo('profile')">Личный счёт<small>Баланс и реквизиты</small></button>
+            <button onclick="portalGo('payments')">Переводы<small>По логину клиента</small></button>
+            <button onclick="portalGo('overview')">Пополнение<small>Зачисление средств</small></button>
+            <button onclick="portalGo('payments')">Выписка<small>История операций</small></button>
+          </div>
+        </section>
+        <section class="retro-box" style="max-height: 400px; overflow-y: auto;">
+          <div class="box-title">Сводка выживших / Барахолка</div>
+          <div class="box-content" style="padding: 10px;">
+            <div class="news-item" style="margin-bottom: 15px;">
+              <small>ТОРГОВЛЯ / ОРУЖИЕ</small>
+              <b style="display:block; margin-bottom: 5px;">Оружейник Коршун</b>
+              <p style="font-size: 11px; margin: 0; color: #444;">Здравствуй искатель, который просто хочет выжить в этом суровом мире тумана и мутантов! Для твоего взора открывается большой ассортимент всякого оружия разных классов и калибров, Бронежилеты и пластины на любой вкус и цвет, медицина, противогазы и фильтра, а так же множество других товаров! Если же нужного вам товара в наличии не оказалось, можно оформить его под заказ! Оплата при получении. Цены честные и без обмана! Связаться со мной можно любым удобным способом! <br><i>By Коршун</i></p>
+            </div>
+            <div class="news-item" style="margin-bottom: 15px;">
+              <small>ПРОДУКТЫ / КУХНЯ</small>
+              <b style="display:block; margin-bottom: 5px;">Повар А.С. Пескарев</b>
+              <p style="font-size: 11px; margin: 0; color: #444;">Вам предлагается большой Ассортимент готовых блюд кухонь многих стран и национальностей! по вашему желанию вы можете оформить заказ с конкретизацией позиций, либо же выбрать что то из уже готового. на выбор имеется множество охотничьих колбас, овощных рагу, сыров, супов и многого другого. с полным меню вы можете ознакомиться связавшись по адресу отправителя этого сообщения, либо уже при встрече. все детали уточняйте заранее! <br><i>А.С. Пескарев</i></p>
+            </div>
+            <div class="news-item" style="border-top: 1px dashed #ccc; padding-top: 10px;">
+              <small>ТРАНСПОРТ / ОСОБЫЕ ПРЕДЛОЖЕНИЯ</small>
+              <b style="display:block; margin-bottom: 5px;">Автодилер</b>
+              <p style="font-size: 11px; margin: 0; color: #444; font-family: 'Times New Roman', serif;">
+                <b>Greetings, gentlemen.</b> I want to sell my armored car, the <b>“Pitbull”</b>. Price is <b>40 million</b>. For guys who want to buy a car up to 2 million, I can offer my <b>Humvee</b>. Price is <b>1.8 million</b>.<br><br>
+                <b>Приветствую вас, джентльмены.</b> Я хочу продать свой бронеавтомобиль <b>"Питбуль"</b>. Цена - <b>40 миллионов</b>. Для ребят, которые хотят приобрести машину до 2кк, могу предложить Свой <b>Хамви</b>. цена <b>1.8 миллиона</b>.
+              </p>
+            </div>
+          </div>
+        </section>
+      </div>
+      <section class="retro-box">
+        <div class="box-title">Работать с банком через Интернет — просто!</div>
+        <div class="box-content small-print"><b>1.</b> Зарегистрируйте логин и пароль. &nbsp; <b>2.</b> Войдите в кабинет. &nbsp; <b>3.</b> Управляйте своим счётом.</div>
+      </section>
+      <div class="web-badges"><span class="web-badge">ЗАТО-БАНК<br>INTERNET BANKING</span><span class="web-badge orange">0% КОМИССИЯ<br>ВНУТРИ БАНКА</span><span class="web-badge">ЛОГИН + ПАРОЛЬ<br>БЕЗ ЭЛ. ПОЧТЫ</span></div>
+    </section>
+    <section class="auth-panel">
+      <div class="auth-box">
+        <h2 id="authTitle">ВХОД В ИНТЕРНЕТ-БАНК</h2>
+        <p class="sub" id="authSub">Введите ваши учётные данные.</p>
+        <div class="tabs"><button id="loginTab" class="active">Войти</button><button id="registerTab">Регистрация</button></div>
+        <form id="loginForm">
+          <div class="field"><label>Логин</label><input id="loginLogin" type="text" autocomplete="username" placeholder="Введите логин" required></div>
+          <div class="field"><label>Пароль</label><input id="loginPassword" type="password" autocomplete="current-password" placeholder="Введите пароль" required></div>
+          <button class="primary">Войти в кабинет</button>
+          <div class="message" id="loginMsg"></div>
+        </form>
+        <form id="registerForm" class="hidden">
+          <div class="field"><label>Логин</label><input id="regLogin" type="text" autocomplete="username" placeholder="Придумайте логин" required></div>
+          <div class="field"><label>Пароль</label><input id="regPassword" type="password" minlength="6" autocomplete="new-password" placeholder="Не менее 6 символов" required></div>
+          <div class="field"><label>Повторите пароль</label><input id="regRepeat" type="password" minlength="6" autocomplete="new-password" placeholder="Введите пароль ещё раз" required></div>
+          <button class="primary">Создать аккаунт</button>
+          <div class="message" id="regMsg"></div>
+        </form>
+        <p class="auth-note">Аккаунты и операции сохраняются в Firebase (Firestore). Это демонстрационная система.</p>
+        <div style="border-top:1px dotted #b8c4d4;margin-top:10px;padding-top:8px;text-align:center">
+          <button type="button" class="link-btn" id="admLoginBtn" style="font-size:11px">Служебный вход для администратора</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="app" class="app hidden">
+    <aside class="side">
+      <nav class="nav">
+        <button class="active" data-page="overview">Обзор</button>
+        <button data-page="payments">Платежи</button>
+        <button data-page="cards">Карта</button>
+        <button data-page="broker">▥ Брокер</button>
+        <button data-page="cloud">☁ Облако</button>
+        <button data-page="profile">Профиль</button>
+      </nav>
+      <div class="side-bottom">
+        <div class="user-mini"><div class="avatar" id="sideAvatar">З</div><div><b id="sideName">Клиент</b><small id="sideLogin">Логин</small></div></div>
+        <button class="logout" id="logout">↪ Выйти</button>
+      </div>
+    </aside>
+    <main class="main">
+      <header class="topbar">
+        <h1 id="pageTitle">Обзор</h1>
+        <div class="top-actions"><button class="icon-btn" id="bell" title="Уведомления">🔔</button><div class="avatar" id="topAvatar">З</div></div>
+      </header>
+      <div class="content">
+        
+        <section class="page active" id="page-overview">
+          <div class="welcome"><div><h2>Добро пожаловать, <span id="welcomeName">Клиент</span>!</h2><p>Состояние вашего счёта и последние операции.</p></div><div class="date" id="currentDate"></div></div>
+          <div class="grid">
+            <div>
+              <div class="card balance-card"><div class="balance-label">Доступный баланс<button class="balance-toggle" id="balanceToggle" type="button">Скрыть</button></div><div class="balance" id="balance">0 <small>₽</small></div><div class="account-line"><span>Личный счёт</span><span id="accountNumber">•••• 0000</span></div></div>
+              <div class="card transactions" style="margin-top:12px"><div class="section-head"><h3>Последние операции</h3><button class="link-btn" data-page-go="payments">Все операции</button></div><div id="txList"></div></div>
+            </div>
+            <div>
+              <div class="card"><div class="section-head"><h3>Быстрые действия</h3></div><div class="quick"><button id="topupBtn"><span class="qicon">＋</span><span>Пополнить</span></button><button id="sendBtn"><span class="qicon">↗</span><span>Перевести</span></button><button data-page-go="profile"><span class="qicon">▤</span><span>Реквизиты</span></button></div></div>
+              <div class="notice"><b>Обратите внимание!</b><br>Для перевода достаточно логина получателя. Комиссия — 0%.</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="page" id="page-payments">
+          <div class="welcome"><div><h2>Платежи и переводы</h2><p>Переводите средства между счетами ЗАТО-Банка.</p></div></div>
+          <div class="grid">
+            <div class="card">
+              <div class="section-head"><h3>Новый перевод</h3></div>
+              <form id="transferForm">
+                <div class="field"><label>Логин получателя</label><input id="recipient" type="text" placeholder="Логин получателя" required></div>
+                <div class="field"><label>Сумма (₽)</label><input id="transferAmount" type="number" min="1" step="1" placeholder="0" required></div>
+                <div class="field"><label>Комментарий</label><input id="transferComment" type="text" maxlength="50" placeholder="Назначение перевода"></div>
+                <button class="primary">Перевести средства</button>
+                <div class="message" id="transferMsg"></div>
+              </form>
+            </div>
+            <div class="card">
+              <div class="section-head"><h3>История операций</h3></div>
+              <div class="toolbar" style="display:flex;gap:5px;margin-bottom:10px;"><input id="txSearch" type="search" placeholder="Поиск..."><select id="txFilter"><option value="all">Все</option><option value="in">Зачисления</option><option value="out">Списания</option></select><button class="secondary" type="button" id="exportTx">CSV ↓</button></div>
+              <div id="allTxList"></div>
+              <p class="page-notice" id="txSummary"></p>
+            </div>
+          </div>
+        </section>
+
+        <section class="page" id="page-cards">
+          <div class="welcome"><div><h2>Карты и счета</h2><p>Управляйте всеми вашими картами и накопительными счетами.</p></div></div>
+          <div style="display:flex; gap:10px; margin-bottom:15px; flex-wrap:wrap">
+            <button class="primary" id="issueDebitCard" style="width:auto">Выпустить дебетовую</button>
+            <button class="secondary" id="issueCreditCard" style="width:auto">Выпустить кредитную</button>
+            <button class="secondary" id="createSavingsAccount" style="width:auto">Открыть накопительный счёт</button>
+          </div>
+          <div id="cardsList" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:15px"></div>
+          <div id="cardEmpty" class="card hidden"><div class="section-head"><h3>У вас пока нет карт</h3></div><p>Выпустите карту или откройте счёт для совершения операций.</p></div>
+        </section>
+
+        <section class="page" id="page-cloud">
+          <div class="welcome"><div><h2>Облачное обслуживание</h2><p>Данные синхронизируются через Firebase Firestore.</p></div></div>
+          <div class="card"><div class="section-head"><h3>Облачное хранение</h3></div><p>Учётные записи и операции сохраняются в Firebase Authentication и Firestore. Это позволяет входить с любого устройства и видеть одни и те же данные.</p><div class="notice">Демонстрационный проект. Не используйте реальные банковские реквизиты.</div></div>
+        </section>
+
+        <section class="page" id="page-broker">
+          <div class="welcome"><div><h2>Брокерское обслуживание</h2><p>Каталог акций предприятий ЗАТО-87.</p></div></div>
+          <div class="notice broker-disclaimer"><b>Демо-режим.</b> Это внутриигровая биржа ЗАТО-87: котировки и сделки существуют только внутри проекта и не связаны с реальным рынком.</div>
+          <div id="brokerEmpty" class="card transactions"><h3>Личный брокерский счёт</h3><p>Бесплатное открытие. Средства брокерского и банковского счетов учитываются отдельно.</p><button class="primary" id="openBroker">Открыть брокерский счёт</button></div>
+          <div id="brokerBody" class="hidden">
+            <div class="card broker-wallet"><div class="section-head"><div><span class="broker-kicker">ЛИЧНЫЙ КАБИНЕТ ИНВЕСТОРА</span><h3>Мой брокерский портфель</h3></div></div><div id="brokerTotals"></div><div class="broker-transfer-panel"><div><b>Перевод между счетами</b><small>Пополняйте брокерский баланс с основного счёта или выводите свободные средства обратно.</small></div><input id="brokerCash" type="number" min="1" step="1" placeholder="Сумма, ₽"><button class="secondary" id="brokerDeposit">Пополнить</button><button class="secondary" id="brokerWithdraw">Вывести</button></div><div id="brokerPositions"></div></div>
+            <div id="brokerMarket" class="transactions"></div>
+            <div class="card transactions">
+              <div class="section-head"><div><span class="broker-kicker">ТОРГОВЫЙ ТЕРМИНАЛ</span><h3>Новое поручение</h3></div></div>
+              <form id="tradeForm">
+                <div class="field"><label for="tradeTicker">Компания / тикер</label><select id="tradeTicker"><option>NOUL</option><option>GRSP</option><option>SNRS</option><option>IMPK</option></select></div>
+                <div class="field"><label for="tradeSide">Операция</label><select id="tradeSide"><option value="buy">Купить</option><option value="sell">Продать</option></select></div>
+                <div class="field"><label for="tradeQty">Количество</label><input id="tradeQty" type="number" min="1" max="10000" step="1" value="1" required></div>
+                <p id="tradePreview"></p>
+                <button class="primary">Подтвердить поручение</button>
+                <div class="message" id="tradeMsg"></div>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <section class="page" id="page-profile">
+          <div class="welcome"><div><h2>Профиль и счёт</h2><p>Данные вашей учётной записи.</p></div></div>
+          <div class="card profile-form"><div class="field"><label>Имя владельца</label><input id="profileName" type="text"></div><div class="field"><label>Логин</label><input id="profileLogin" type="text" disabled></div><div class="field"><label>Номер счёта</label><input id="profileAccount" type="text" disabled></div><button class="primary" id="saveProfile">Сохранить изменения</button><div class="message" id="profileMsg"></div></div>
+          <div class="card profile-form security-box">
+            <div class="section-head"><h3>Безопасность доступа</h3></div>
+            <form id="passwordForm">
+              <div class="field"><label for="oldPassword">Текущий пароль</label><input id="oldPassword" type="password" required></div>
+              <div class="field"><label for="newPassword">Новый пароль</label><input id="newPassword" type="password" minlength="6" maxlength="128" required></div>
+              <div class="field"><label for="repeatNewPassword">Повторите новый пароль</label><input id="repeatNewPassword" type="password" minlength="6" maxlength="128" required></div>
+              <button class="primary">Сменить пароль</button>
+              <div class="message" id="passwordMsg"></div>
             </form>
+            <p class="session-note">Пароли хранятся в Firebase Authentication в виде защищённого хеша и недоступны для чтения.</p>
           </div>
-          <div class="card">
-            <div class="section-head"><h3>История операций</h3></div>
-            <div class="toolbar"><input id="txSearch" type="search" placeholder="Поиск по истории"><select id="txFilter"><option value="all">Все</option><option value="in">Зачисления</option><option value="out">Списания</option></select><button class="secondary" type="button" id="exportTx">CSV ↓</button></div>
-            <div id="allTxList"></div>
-            <p class="page-notice" id="txSummary"></p>
+        </section>
+
+        <section class="page" id="page-admin">
+          <div class="adm-head"><div><h2>Панель администратора <span class="adm-badge">СЛУЖЕБНЫЙ ДОСТУП</span></h2><p>Наблюдение за учётными записями, операциями и картами. Все действия фиксируются в журнале.</p></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="adm-btn" id="admRefresh">Обновить данные</button><button type="button" class="adm-btn danger" id="admLogout">Завершить сеанс</button></div></div>
+          <div class="notice" style="margin:0 0 14px"><b>Режим администрирования.</b> Доступ предоставлен уполномоченному лицу в служебных целях. Каждое действие администратора записывается в журнал.</div>
+          <div class="adm-stats">
+            <div class="adm-stat"><small>Учётных записей</small><b id="admStatUsers">0</b></div>
+            <div class="adm-stat"><small>Карт всего</small><b id="admStatCards">0</b></div>
+            <div class="adm-stat"><small>Карт заблокировано</small><b id="admStatFrozen">0</b></div>
+            <div class="adm-stat"><small>Операций в системе</small><b id="admStatTx">0</b></div>
+            <div class="adm-stat"><small>Сумма зачислений, ₽</small><b id="admStatIn">0</b></div>
           </div>
-        </div>
-      </section>
+          <div class="adm-card"><div class="adm-card-title">Учётные записи клиентов <span class="adm-count" id="admUsersCount">0</span></div><div class="adm-card-body"><div class="adm-toolbar" style="display:flex;gap:5px;margin-bottom:10px;"><input id="admSearch" type="search" placeholder="Поиск..."><select id="admSort"><option value="id">Счёт ↑</option><option value="login">Логин ↑</option><option value="balance">Баланс ↓</option><option value="tx">Операций ↓</option><option value="new">Новые сначала</option></select><button type="button" class="adm-btn" id="admExportUsers">Экспорт CSV</button></div><div class="adm-table-wrap"><table class="adm-table"><thead><tr><th>Счёт</th><th>Логин</th><th>Имя</th><th class="num">Баланс</th><th>Брокер</th><th>Карта</th><th class="num">Операций</th><th>Действия</th></tr></thead><tbody id="admUsers"></tbody></table></div><p class="page-notice" id="admUsersSummary" style="margin:9px 0 0"></p></div></div>
+          <div class="adm-card" id="admUserCard" style="display:none"><div class="adm-card-title">Карточка учётной записи <button type="button" class="adm-btn" id="admUserClose" style="font-size:10px;padding:2px 7px">Закрыть</button></div><div class="adm-card-body" id="admUserCardBody"></div></div>
+          <div class="adm-card"><div class="adm-card-title">Журнал операций всех клиентов <span class="adm-count" id="admLogCount">0</span></div><div class="adm-card-body"><div class="adm-toolbar" style="display:flex;gap:5px;margin-bottom:10px;"><input id="admTxSearch" type="search" placeholder="Поиск..."><select id="admTxType"><option value="all">Все</option><option value="in">Зачисления</option><option value="out">Списания</option></select><select id="admTxUser"><option value="">Все клиенты</option></select><button type="button" class="adm-btn" id="admExportTx">Экспорт CSV</button></div><div class="adm-log" id="admLog"></div></div></div>
+          <div class="adm-card"><div class="adm-card-title">Журнал действий администратора <button type="button" class="adm-btn danger" id="admAuditClear" style="font-size:10px;padding:2px 7px">Очистить</button></div><div class="adm-card-body"><div class="adm-log adm-audit" id="admAudit"></div></div></div>
+        </section>
 
-      <section class="page" id="page-cards">
-        <div class="welcome"><div><h2>Карты и счета</h2><p>Управляйте всеми вашими картами и накопительными счетами.</p></div></div>
-        <div style="display:flex; gap:10px; margin-bottom:15px; flex-wrap:wrap">
-          <button class="primary" id="issueDebitCard" style="width:auto">Выпустить дебетовую</button>
-          <button class="secondary" id="issueCreditCard" style="width:auto">Выпустить кредитную</button>
-          <button class="secondary" id="createSavingsAccount" style="width:auto">Открыть накопительный счёт</button>
-        </div>
-        <div id="cardsList" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:15px"></div>
-        <div id="cardEmpty" class="card hidden"><div class="section-head"><h3>У вас пока нет карт</h3></div><p>Выпустите карту или откройте счёт для совершения операций.</p></div>
-      </section>
+      </div>
+    </main>
+  </div>
 
-      <section class="page" id="page-cloud">
-        <div class="welcome"><div><h2>Облачное обслуживание</h2><p>Данные синхронизируются через Firebase Firestore.</p></div></div>
-        <div class="card"><div class="section-head"><h3>Облачное хранение</h3></div><p>Учётные записи и операции сохраняются в Firebase Authentication и Firestore. Это позволяет входить с любого устройства и видеть одни и те же данные.</p><div class="notice">Демонстрационный проект. Не используйте реальные банковские реквизиты.</div></div>
-      </section>
+  <div class="modal-back hidden" id="modalBack"><div class="modal"><h3>Пополнение счёта</h3><p>Начисление расчётных единиц произойдёт мгновенно.</p><div class="field"><label>Сумма, ₽</label><input id="topupAmount" type="number" min="1" step="1" placeholder="1000"></div><div class="modal-actions"><button class="secondary" id="closeModal">Отмена</button><button class="primary" id="confirmTopup">Пополнить</button></div><div class="message" id="topupMsg"></div></div></div>
+  <div class="modal-back hidden" id="transferBack"><div class="modal"><h3>Подтверждение перевода</h3><div class="receipt-line"><span>Получатель</span><strong id="confirmRecipient"></strong></div><div class="receipt-line"><span>Сумма</span><strong id="confirmAmount"></strong></div><div class="receipt-line"><span>Комментарий</span><strong id="confirmComment"></strong></div><div class="receipt-line"><span>Комиссия</span><strong>0 ₽</strong></div><div class="modal-actions"><button class="secondary" type="button" id="cancelTransfer">Отмена</button><button class="primary" type="button" id="confirmTransfer">Подтвердить</button></div><div class="message" id="confirmTransferMsg" role="status"></div></div></div>
+  <div class="modal-back hidden" id="admLoginBack"><div class="modal"><h3>Служебный вход</h3><p>Доступ только для уполномоченного администратора системы.</p><div class="field"><label for="admLogin">Служебный логин</label><input id="admLogin" type="text" placeholder="admin"></div><div class="field"><label for="admPassword">Служебный пароль</label><input id="admPassword" type="password" placeholder="Пароль"></div><div class="modal-actions"><button class="secondary" type="button" id="admLoginCancel">Отмена</button><button class="primary" type="button" id="admLoginSubmit">Войти</button></div><div class="message" id="admLoginMsg" role="status"></div></div></div>
+  <div class="adm-confirm-back hidden" id="admConfirmBack"><div class="adm-confirm"><h3 id="admConfirmTitle">Подтверждение действия</h3><div class="body"><p id="admConfirmText"></p><div class="target" id="admConfirmTarget"></div><label for="admConfirmReason">Основание (обязательно)</label><input id="admConfirmReason" type="text" maxlength="120" placeholder="Укажите основание действия"></div><div class="err" id="admConfirmErr"></div><div class="foot"><button type="button" id="admConfirmCancel">Отмена</button><button type="button" class="ok" id="admConfirmOk">Подтвердить</button></div></div></div>
+  <div class="toast" id="toast"></div>
 
-      <section class="page" id="page-broker">
-        <div class="welcome"><div><h2>Брокерское обслуживание</h2><p>Каталог акций предприятий ЗАТО-87.</p></div></div>
-        <div class="notice">Демонстрационный каталог эмитентов. Указанные цены не являются биржевыми котировками; сделки не выходят на рынок.</div>
-        <div id="brokerEmpty" class="card transactions"><h3>Личный брокерский счёт</h3><p>Бесплатное открытие. Средства брокерского и банковского счетов учитываются отдельно.</p><button class="primary" id="openBroker">Открыть брокерский счёт</button></div>
-        <div id="brokerBody" class="hidden">
-          <div class="card transactions"><div class="section-head"><h3>Ваш портфель</h3></div><div id="brokerTotals"></div><div class="toolbar" style="margin-top:12px"><input id="brokerCash" type="number" min="1" step="1" placeholder="Сумма (₽)"><button class="secondary" id="brokerDeposit">На брокерский счёт</button><button class="secondary" id="brokerWithdraw">На банковский счёт</button></div><div id="brokerPositions"></div></div>
-          <div id="brokerMarket" class="transactions"></div>
-          <div class="card transactions">
-            <div class="section-head"><h3>Биржевое поручение</h3></div>
-            <form id="tradeForm">
-              <div class="field"><label for="tradeTicker">Эмитент</label><select id="tradeTicker" style="padding:7px;width:100%"><option>NOUL</option><option>GRSP</option><option>SNRS</option><option>IMPK</option></select></div>
-              <div class="field"><label for="tradeSide">Операция</label><select id="tradeSide" style="padding:7px;width:100%"><option value="buy">Купить</option><option value="sell">Продать</option></select></div>
-              <div class="field"><label for="tradeQty">Количество акций</label><input id="tradeQty" type="number" min="1" max="10000" step="1" value="1" required></div>
-              <p id="tradePreview"></p>
-              <button class="primary">Подтвердить поручение</button>
-              <div class="message" id="tradeMsg"></div>
-            </form>
-          </div>
-        </div>
-      </section>
-
-      <section class="page" id="page-profile">
-        <div class="welcome"><div><h2>Профиль и счёт</h2><p>Данные вашей учётной записи.</p></div></div>
-        <div class="card profile-form"><div class="field"><label>Имя владельца</label><input id="profileName" type="text"></div><div class="field"><label>Логин</label><input id="profileLogin" type="text" disabled></div><div class="field"><label>Номер счёта</label><input id="profileAccount" type="text" disabled></div><button class="primary" id="saveProfile">Сохранить изменения</button><div class="message" id="profileMsg"></div></div>
-        <div class="card profile-form security-box">
-          <div class="section-head"><h3>Безопасность доступа</h3></div>
-          <form id="passwordForm">
-            <div class="field"><label for="oldPassword">Текущий пароль</label><input id="oldPassword" type="password" required></div>
-            <div class="field"><label for="newPassword">Новый пароль</label><input id="newPassword" type="password" minlength="6" maxlength="128" required></div>
-            <div class="field"><label for="repeatNewPassword">Повторите новый пароль</label><input id="repeatNewPassword" type="password" minlength="6" maxlength="128" required></div>
-            <button class="primary">Сменить пароль</button>
-            <div class="message" id="passwordMsg"></div>
-          </form>
-          <p class="session-note">Пароли хранятся в Firebase Authentication в виде защищённого хеша и недоступны для чтения.</p>
-        </div>
-      </section>
-
-      <section class="page" id="page-admin">
-        <div class="adm-head"><div><h2>Панель администратора <span class="adm-badge">СЛУЖЕБНЫЙ ДОСТУП</span></h2><p>Наблюдение за учётными записями, операциями и картами. Все действия фиксируются в журнале.</p></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="adm-btn" id="admRefresh">Обновить данные</button><button type="button" class="adm-btn danger" id="admLogout">Завершить сеанс</button></div></div>
-        <div class="notice" style="margin:0 0 14px"><b>Режим администрирования.</b> Доступ предоставлен уполномоченному лицу в служебных целях. Каждое действие администратора записывается в журнал.</div>
-        <div class="adm-stats" aria-label="Сводные показатели">
-          <div class="adm-stat"><small>Учётных записей</small><b id="admStatUsers">0</b></div>
-          <div class="adm-stat"><small>Карт всего</small><b id="admStatCards">0</b></div>
-          <div class="adm-stat"><small>Карт заблокировано</small><b id="admStatFrozen">0</b></div>
-          <div class="adm-stat"><small>Операций в системе</small><b id="admStatTx">0</b></div>
-          <div class="adm-stat"><small>Сумма зачислений, ₽</small><b id="admStatIn">0</b></div>
-        </div>
-        <div class="adm-card"><div class="adm-card-title">Учётные записи клиентов <span class="adm-count" id="admUsersCount">0</span></div><div class="adm-card-body"><div class="adm-toolbar"><input id="admSearch" type="search" placeholder="Поиск по логину или имени"><select id="admSort"><option value="id">Счёт ↑</option><option value="login">Логин ↑</option><option value="balance">Баланс ↓</option><option value="tx">Операций ↓</option><option value="new">Новые сначала</option></select><button type="button" class="adm-btn" id="admExportUsers">Экспорт CSV</button></div><div class="adm-table-wrap"><table class="adm-table"><thead><tr><th>Счёт</th><th>Логин</th><th>Имя</th><th class="num">Баланс</th><th>Брокер</th><th>Карта</th><th class="num">Операций</th><th>Действия</th></tr></thead><tbody id="admUsers"></tbody></table></div><p class="page-notice" id="admUsersSummary" style="margin:9px 0 0"></p></div></div>
-        <div class="adm-card" id="admUserCard" style="display:none"><div class="adm-card-title">Карточка учётной записи <button type="button" class="adm-btn" id="admUserClose" style="font-size:10px;padding:2px 7px">Закрыть</button></div><div class="adm-card-body" id="admUserCardBody"></div></div>
-        <div class="adm-card"><div class="adm-card-title">Журнал операций всех клиентов <span class="adm-count" id="admLogCount">0</span></div><div class="adm-card-body"><div class="adm-toolbar"><input id="admTxSearch" type="search" placeholder="Поиск: операция, комментарий, логин"><select id="admTxType"><option value="all">Все операции</option><option value="in">Зачисления</option><option value="out">Списания</option></select><select id="admTxUser"><option value="">Все клиенты</option></select><button type="button" class="adm-btn" id="admExportTx">Экспорт CSV</button></div><div class="adm-log" id="admLog"></div></div></div>
-        <div class="adm-card"><div class="adm-card-title">Журнал действий администратора <button type="button" class="adm-btn danger" id="admAuditClear" style="font-size:10px;padding:2px 7px">Очистить</button></div><div class="adm-card-body"><div class="adm-log adm-audit" id="admAudit"></div></div></div>
-      </section>
-
-    </div></main>
-</div>
-
-<div class="modal-back hidden" id="modalBack"><div class="modal"><h3>Пополнение счёта</h3><p>Начисление расчётных единиц произойдёт мгновенно.</p><div class="field"><label>Сумма, ₽</label><input id="topupAmount" type="number" min="1" step="1" placeholder="1000"></div><div class="modal-actions"><button class="secondary" id="closeModal">Отмена</button><button class="primary" id="confirmTopup">Пополнить</button></div><div class="message" id="topupMsg"></div></div></div>
-<div class="modal-back hidden" id="transferBack"><div class="modal" role="dialog" aria-modal="true" tabindex="-1"><h3>Подтверждение перевода</h3><div class="receipt-line"><span>Получатель</span><strong id="confirmRecipient"></strong></div><div class="receipt-line"><span>Сумма</span><strong id="confirmAmount"></strong></div><div class="receipt-line"><span>Комментарий</span><strong id="confirmComment"></strong></div><div class="receipt-line"><span>Комиссия</span><strong>0 ₽</strong></div><div class="modal-actions"><button class="secondary" type="button" id="cancelTransfer">Отмена</button><button class="primary" type="button" id="confirmTransfer">Подтвердить</button></div><div class="message" id="confirmTransferMsg" role="status"></div></div></div>
-<div class="modal-back hidden" id="admLoginBack"><div class="modal" role="dialog" aria-modal="true" tabindex="-1"><h3>Служебный вход</h3><p>Доступ только для уполномоченного администратора системы.</p><div class="field"><label for="admLogin">Служебный логин</label><input id="admLogin" type="text" placeholder="admin"></div><div class="field"><label for="admPassword">Служебный пароль</label><input id="admPassword" type="password" placeholder="Пароль"></div><div class="modal-actions"><button class="secondary" type="button" id="admLoginCancel">Отмена</button><button class="primary" type="button" id="admLoginSubmit">Войти</button></div><div class="message" id="admLoginMsg" role="status"></div></div></div>
-<div class="adm-confirm-back hidden" id="admConfirmBack"><div class="adm-confirm" role="dialog" aria-modal="true" tabindex="-1"><h3 id="admConfirmTitle">Подтверждение действия</h3><div class="body"><p id="admConfirmText"></p><div class="target" id="admConfirmTarget"></div><label for="admConfirmReason">Основание (обязательно)</label><input id="admConfirmReason" type="text" maxlength="120" placeholder="Укажите основание действия"></div><div class="err" id="admConfirmErr"></div><div class="foot"><button type="button" id="admConfirmCancel">Отмена</button><button type="button" class="ok" id="admConfirmOk">Подтвердить</button></div></div></div>
-<div class="toast" id="toast"></div>
-
-<footer class="portal-footer"><div><b>© ЗАТО-Банк. Демонстрация интернет-банка.</b><br><a href="#" onclick="showToast('Демонстрация.');return false">Информация о системе</a> &nbsp; | &nbsp; <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false">Наверх ↑</a></div><div class="footer-right"><span>HTML • CSS • JAVASCRIPT<br>FIREBASE</span><p>Рекомендуемое разрешение: 1024 × 768</p></div></footer>
+  <footer class="portal-footer"><div><b>© ЗАТО-Банк. Демонстрация интернет-банка.</b><br><a href="#" onclick="showToast('Демонстрация.');return false">Информация о системе</a> &nbsp; | &nbsp; <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false">Наверх ↑</a></div><div class="footer-right"><span>HTML • CSS • JAVASCRIPT<br>FIREBASE</span><p>Рекомендуемое разрешение: 1024 × 768</p></div></footer>
 </div>
 
 <script>
 // ===== FIREBASE INIT =====
-
 const firebaseConfig = {
-
   apiKey: "AIzaSyAAtutkHLDFinuy7okLK4P9V2cC_aBgYrw",
-
   authDomain: "bank-96935.firebaseapp.com",
-
   databaseURL: "https://bank-96935-default-rtdb.europe-west1.firebasedatabase.app",
-
   projectId: "bank-96935",
-
   storageBucket: "bank-96935.firebasestorage.app",
-
   messagingSenderId: "190623855009",
-
   appId: "1:190623855009:web:50e8a55edae29c81af9be0",
-
   measurementId: "G-P1TM2E56PT"
-
 };
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
@@ -362,10 +530,12 @@ const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const IDLE=15*60*1000,LIMIT=100000;
 let current=null,pendingTransfer=null,showCardNumber=false,hideBalance=false,lastActive=Date.now(),toastTimer,returnFocus=null;
 let usersCache=[];
+
 function fail(t){throw new Error(t)}
 function initials(n){return (n||'З').trim().split(/\s+/).map(x=>x[0]).join('').slice(0,2).toUpperCase()}
 function money(n){return new Intl.NumberFormat('ru-RU').format(n)+' ₽'}
 function escapeHtml(x){return String(x??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+
 function showToast(t){const e=$('#toast');clearTimeout(toastTimer);e.textContent=t;e.classList.add('show');toastTimer=setTimeout(()=>e.classList.remove('show'),4500)}
 function bind(sel,event,fn,msg){$(sel).addEventListener(event,async e=>{if(event==='submit')e.preventDefault();const b=event==='submit'?e.currentTarget.querySelector('button[type=submit],button.primary'):e.currentTarget;if(b&&b.disabled)return;if(b)b.disabled=true;try{if(current&&Date.now()-lastActive>=IDLE){logout('Время сеанса истекло. Войдите снова.');return}await fn(e)}catch(err){if(msg)$(msg).textContent=err.message||'Не удалось выполнить операцию.';else showToast(err.message||'Не удалось выполнить операцию.')}finally{if(b)b.disabled=false}})}
 function newId(){return Date.now()+Math.floor(Math.random()*1000)}
@@ -377,26 +547,18 @@ async function getUsers(){
   const snap=await USERS_COL.get();
   usersCache=snap.docs.map(d=>{
     const data=d.data();
-    return {
-      ...data,
-      id: d.id,
-      login: data.login || (data.email||'').split('@')[0],
-      balance: Number.isSafeInteger(data.balance) ? data.balance : 0,
-      transactions: Array.isArray(data.transactions) ? data.transactions : [],
-      cards: Array.isArray(data.cards) ? data.cards : []
-    };
+    return {...data,id:d.id,login:data.login||(data.email||'').split('@')[0],balance:Number.isSafeInteger(data.balance)?data.balance:0,transactions:Array.isArray(data.transactions)?data.transactions:[],cards:Array.isArray(data.cards)?data.cards:[]};
   });
   return usersCache;
 }
 function normalizeUser(id,data,fallbackLogin){
-  return {
-    ...data,
-    id,
-    login: data.login || fallbackLogin || (data.email||'').split('@')[0],
-    balance: Number.isSafeInteger(data.balance) ? data.balance : 0,
-    transactions: Array.isArray(data.transactions) ? data.transactions : [],
-    cards: Array.isArray(data.cards) ? data.cards : []
-  };
+  return {...data,id,login:data.login||fallbackLogin||(data.email||'').split('@')[0],balance:Number.isSafeInteger(data.balance)?data.balance:0,transactions:Array.isArray(data.transactions)?data.transactions:[],cards:Array.isArray(data.cards)?data.cards:[]};
+}
+async function saveUser(user){
+  const {id,...data}=user;
+  await USERS_COL.doc(id).set(data,{merge:true});
+  const idx=usersCache.findIndex(u=>u.id===id);
+  if(idx>=0)usersCache[idx]=user;
 }
 async function findUserByLogin(login){
   const snap=await USERS_COL.where('login','==',login).limit(1).get();
@@ -407,7 +569,7 @@ async function findUserByLogin(login){
 
 // ===== СЕССИЯ =====
 function setSession(user){current=user;lastActive=Date.now();showCardNumber=false;hideBalance=false}
-function openApp(){$('#auth').classList.add('hidden');$('#app').classList.remove('hidden');$('#txSearch').value='';$('#txFilter').value='all';goPage('overview');renderUser();renderAll()}
+function openApp(){$('#auth').classList.add('hidden');$('#app').classList.remove('hidden');$('#txSearch').value='';$('#txFilter').value='all';goPage('overview');renderUser();renderAll();renderCards();renderBrokerUpd();}
 function switchAuth(reg){$('#loginForm').classList.toggle('hidden',reg);$('#registerForm').classList.toggle('hidden',!reg);$('#loginTab').classList.toggle('active',!reg);$('#registerTab').classList.toggle('active',reg);$('#authTitle').textContent=reg?'ОТКРЫТИЕ ЛИЧНОГО СЧЁТА':'ВХОД В ИНТЕРНЕТ-БАНК';$('#authSub').textContent=reg?'Придумайте логин и пароль.':'Введите ваши учётные данные.';$('#loginMsg').textContent='';$('#regMsg').textContent=''}
 function portalGo(p){if(current)goPage(p);else{switchAuth(false);$('#loginMsg').textContent='Для работы со счётом необходимо войти.';$('#loginLogin').focus()}}
 $('#loginTab').onclick=()=>switchAuth(false);$('#registerTab').onclick=()=>switchAuth(true);
@@ -468,19 +630,18 @@ async function mutate(fn){
   await fn(user,users);
   await saveUser(user);
   current=user;
-  renderUser();renderAll();
+  renderUser();renderAll();renderCards();renderBrokerUpd();
 }
 
 // ===== RENDER =====
 function renderUser(){if(!current)return;const ini=initials(current.name);const account='40817'+String(current.id).slice(-15).padStart(15,'0');['#sideAvatar','#topAvatar'].forEach(s=>$(s).textContent=ini);$('#sideName').textContent=current.name;$('#sideLogin').textContent='Логин: '+current.login;$('#welcomeName').textContent=current.name;$('#profileName').value=current.name;$('#profileLogin').value=current.login;$('#profileAccount').value=account;$('#accountNumber').textContent=account}
-function renderAll(){if(!current)return;$('#balance').textContent=hideBalance?'••• ₽':money(current.balance);$('#balanceToggle').textContent=hideBalance?'Показать':'Скрыть';$('#currentDate').textContent=new Date().toLocaleDateString('ru-RU',{day:'numeric',month:'long',year:'numeric'});renderTx('#txList',current.transactions.slice().reverse().slice(0,5));renderHistory();renderCard();renderBroker()}
+function renderAll(){if(!current)return;$('#balance').textContent=hideBalance?'••• ₽':money(current.balance);$('#balanceToggle').textContent=hideBalance?'Показать':'Скрыть';$('#currentDate').textContent=new Date().toLocaleDateString('ru-RU',{day:'numeric',month:'long',year:'numeric'});renderTx('#txList',current.transactions.slice().reverse().slice(0,5));renderHistory();}
 function renderTx(sel,arr){$(sel).innerHTML=arr.length?arr.map(t=>`<div class="tx"><div class="tx-icon">${t.type==='in'?'↓':'↑'}</div><div class="tx-info"><strong>${escapeHtml(t.title)}</strong><small>${escapeHtml(new Date(t.date).toLocaleString('ru-RU',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}))}${t.comment?' · '+escapeHtml(t.comment):''}</small></div><div class="tx-amount ${t.type==='in'?'positive':'negative'}">${t.type==='in'?'+':'−'}${escapeHtml(money(t.amount))}</div></div>`).join(''):'<div class="empty">Операций не найдено.</div>'}
 function filteredTx(){const q=$('#txSearch').value.trim().toLowerCase(),type=$('#txFilter').value;return current.transactions.slice().reverse().filter(t=>(type==='all'||t.type===type)&&[t.title,t.comment,t.amount].join(' ').toLowerCase().includes(q))}
 function renderHistory(){if(!current)return;const a=filteredTx();renderTx('#allTxList',a);$('#txSummary').textContent='Найдено операций: '+a.length+'. Выписка CSV учитывает выбранный фильтр.'}
-function renderCard(){const c=current.card;$('#cardEmpty').classList.toggle('hidden',!!c);$('#cardIssued').classList.toggle('hidden',!c);if(!c)return;$('#cardNumber').textContent=showCardNumber?c.number:'ЗТ87 •••• •••• '+c.number.slice(-4);$('#cardHolder').textContent=current.name;$('#cardExpiry').textContent='ДО '+new Date(c.expires).toLocaleDateString('ru-RU',{month:'2-digit',year:'2-digit'});$('#cardBalance').textContent=hideBalance?'••• ₽':money(current.balance);$('#cardVisual').classList.toggle('frozen',!!c.frozen);$('#cardStatus').textContent=c.frozen?'ЗАБЛОКИРОВАНА':'КАРТА АКТИВНА';$('#cardStatus').classList.toggle('blocked',!!c.frozen);$('#freezeCard').textContent=c.frozen?'Разблокировать':'Заблокировать';$('#revealCard').textContent=showCardNumber?'Скрыть номер':'Показать номер'}
 $$('[data-page]').forEach(b=>b.onclick=()=>portalGo(b.dataset.page));
 $$('[data-page-go]').forEach(b=>b.onclick=()=>portalGo(b.dataset.pageGo));
-function goPage(p){if(!$('#page-'+p))return;showCardNumber=false;$$('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===p));$$('.page').forEach(x=>x.classList.toggle('active',x.id==='page-'+p));$('#pageTitle').textContent={overview:'Состояние счёта',payments:'Платежи и переводы',cards:'Виртуальная карта',broker:'Брокерские счета',cloud:'Облачное обслуживание',profile:'Профиль и реквизиты',admin:'Администрирование'}[p]||'Обзор';if(current)renderCard()}
+function goPage(p){if(!$('#page-'+p))return;showCardNumber=false;$$('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===p));$$('.page').forEach(x=>x.classList.toggle('active',x.id==='page-'+p));$('#pageTitle').textContent={overview:'Состояние счёта',payments:'Платежи и переводы',cards:'Виртуальная карта',broker:'Брокерские счета',cloud:'Облачное обслуживание',profile:'Профиль и реквизиты',admin:'Администрирование'}[p]||'Обзор';}
 
 // ===== МОДАЛКИ =====
 function openModal(id,focus){returnFocus=document.activeElement;$(id).classList.remove('hidden');$(focus).focus()}
@@ -568,7 +729,7 @@ bind('#passwordForm','submit',async()=>{
 
 // ===== ИСТОРИЯ / CSV =====
 $('#txSearch').oninput=renderHistory;$('#txFilter').onchange=renderHistory;
-bind('#exportTx','click',()=>{if(!current)return;const clean=v=>{let s=String(v??'');if(/^[\s]*[=+@\-]/.test(s))s="'"+s;return '"'+s.replace(/"/g,'""')+'"'};const rows=[['Дата','Операция','Направление','Сумма (расчётные единицы)','Комментарий'],...filteredTx().map(t=>[new Date(t.date).toLocaleString('ru-RU'),t.title,t.type==='in'?'Зачисление':'Списание',t.amount,t.comment||''])],blob=new Blob(['\ufeff'+rows.map(r=>r.map(clean).join(';')).join('\r\n')],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='zato87-statement-'+new Date().toISOString().slice(0,10)+'.csv';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);showToast('Выписка подготовлена.')});
+bind('#exportTx','click',()=>{if(!current)return;const clean=v=>{let s=String(v??'');if(/^[\s]*[=+@\-]/.test(s))s="'"+s;return '"'+s.replace(/"/g,'""')+'"'};const rows=[['Дата','Операция','Направление','Сумма','Комментарий'],...filteredTx().map(t=>[new Date(t.date).toLocaleString('ru-RU'),t.title,t.type==='in'?'Зачисление':'Списание',t.amount,t.comment||''])],blob=new Blob(['\ufeff'+rows.map(r=>r.map(clean).join(';')).join('\r\n')],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='zato87-statement-'+new Date().toISOString().slice(0,10)+'.csv';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);showToast('Выписка подготовлена.')});
 
 // ===== ВЫХОД =====
 async function logout(message='Вы вышли из аккаунта.'){
@@ -588,9 +749,9 @@ let lastStored=0;
 function activity(){if(!current)return;const now=Date.now();if(now-lastActive>=IDLE){logout('Автоматический выход: 15 минут бездействия.');return}lastActive=now;if(now-lastStored>10000){lastStored=now}}
 ['pointerdown','keydown','input','scroll'].forEach(e=>document.addEventListener(e,activity,{passive:true}));
 setInterval(()=>{if(current&&Date.now()-lastActive>=IDLE)logout('Автоматический выход: 15 минут бездействия.')},10000);
-document.addEventListener('visibilitychange',()=>{if(document.hidden){showCardNumber=false;if(current)renderCard()}else if(current&&Date.now()-lastActive>=IDLE)logout('Время сеанса истекло. Войдите снова.')});
+document.addEventListener('visibilitychange',()=>{if(document.hidden){showCardNumber=false;}else if(current&&Date.now()-lastActive>=IDLE)logout('Время сеанса истекло. Войдите снова.')});
 
-// ===== БРОКЕР (базовая логика) =====
+// ===== БРОКЕР =====
 const COMPANIES_UPD=[
   {ticker:'NOUL',name:'ОАО «НордОсколУголь»',basePrice:125,description:'Сырьевой гигант.',trend:0.8},
   {ticker:'GRSP',name:'НПО «Гранит-Сплав»',basePrice:240,description:'Сталелитейный конгломерат.',trend:-0.4},
@@ -632,12 +793,13 @@ $('#brokerWithdraw').onclick=()=>moveBroker(false);
 ['#tradeTicker','#tradeSide','#tradeQty'].forEach(s=>$(s).addEventListener('input',previewTrade));
 bind('#tradeForm','submit',async()=>{const ticker=$('#tradeTicker').value,side=$('#tradeSide').value,qty=Number($('#tradeQty').value),c=COMPANIES_UPD.find(c=>c.ticker===ticker);if(!c||!Number.isSafeInteger(qty)||qty<1||qty>10000)fail('Количество: от 1 до 10 000 акций.');await mutate(u=>{if(!u.broker)fail('Откройте брокерский счёт.');if(u.card?.frozen)fail('Разблокируйте карту перед торговлей.');const b=u.broker,p=b.positions[ticker]||{qty:0,cost:0},sum=qty*c.basePrice;if(side==='buy'){if(sum>b.cash)fail('Пополните брокерский счёт: недостаточно средств.');b.cash-=sum;p.qty+=qty;p.cost+=sum}else{if(qty>p.qty)fail('Недостаточно акций.');b.cash+=sum;p.cost=p.qty===qty?0:p.cost*(p.qty-qty)/p.qty;p.qty-=qty}b.positions[ticker]=p;u.transactions.push(tx((side==='buy'?'Покупка ':'Продажа ')+ticker+' · '+qty+' шт.',sum,side==='buy'?'out':'in',{market:true}))});$('#tradeMsg').textContent='Поручение исполнено. Комиссия — 0%.'},'#tradeMsg');
 
-// ===== КАРТЫ (Дебет, Кредит, Накопительный) =====
+// ===== КАРТЫ =====
 function generateCardNumber(prefix) { return prefix + ' ' + [0,1,2].map(()=>String(crypto.getRandomValues(new Uint32Array(1))[0]%10000).padStart(4,'0')).join(' '); }
 function renderCards() {
   if (!current) return;
   const cards = current.cards || [];
   const list = $('#cardsList');
+  if (!list) return;
   if (cards.length === 0) { list.innerHTML = '<div class="card"><p class="empty">У вас нет карт. Выпустите первую!</p></div>'; return; }
   list.innerHTML = cards.map((card, index) => {
     const gradient = card.type === 'credit' ? 'linear-gradient(135deg,#2d1b1b,#6b2f2f)' : card.type === 'savings' ? 'linear-gradient(135deg,#1b2d1b,#2f6b2f)' : 'linear-gradient(135deg,#172d25,#267b55)';
@@ -645,21 +807,21 @@ function renderCards() {
       <div class="zato-card-top"><strong>${card.name || 'ЗАТО-Банк'}</strong><small>${card.type.toUpperCase()}<br>ЗАТО-87</small></div>
       <div><div class="zato-card-number">${card.number}</div></div>
       <div class="zato-card-bottom"><span>${card.frozen ? 'ЗАБЛОКИРОВАНА' : 'АКТИВНА'}</span><span>ДО ${new Date(card.expires).toLocaleDateString('ru-RU',{month:'2-digit',year:'2-digit'})}</span></div>
-      <div class="card-controls" style="margin-top:10px; display:flex; gap:5px; flex-wrap:wrap">
-        <button class="secondary" onclick="customizeCard(${index})" style="flex:1; font-size:11px; padding:4px">Дизайн</button>
-        <button class="secondary" onclick="toggleFreeze(${index})" style="flex:1; font-size:11px; padding:4px">${card.frozen ? 'Разблок.' : 'Блок.'}</button>
+      <div class="card-controls">
+        <button class="secondary" onclick="customizeCard(${index})">Дизайн</button>
+        <button class="secondary" onclick="toggleFreeze(${index})">${card.frozen ? 'Разблок.' : 'Блок.'}</button>
       </div>
     </div>`;
   }).join('');
 }
-window.customizeCard = (index) => { const cards = current.cards; const card = cards[index]; const newName = prompt('Введите название карты:', card.name || 'ЗАТО-Банк'); const newColor = prompt('Введите цвет (например, #ff5733 или linear-gradient(135deg, #ff5733, #ffc300)):', card.design || ''); if (newName !== null) card.name = newName; if (newColor !== null && newColor.trim() !== '') card.design = newColor; mutate(u => { u.cards = cards; }).then(() => { renderCards(); showToast('Дизайн обновлён'); }); };
+window.customizeCard = (index) => { const cards = current.cards; const card = cards[index]; const newName = prompt('Введите название карты:', card.name || 'ЗАТО-Банк'); const newColor = prompt('Введите цвет (например, #ff5733):', card.design || ''); if (newName !== null) card.name = newName; if (newColor !== null && newColor.trim() !== '') card.design = newColor; mutate(u => { u.cards = cards; }).then(() => { renderCards(); showToast('Дизайн обновлён'); }); };
 window.toggleFreeze = (index) => { const cards = current.cards; cards[index].frozen = !cards[index].frozen; mutate(u => { u.cards = cards; }).then(() => { renderCards(); showToast(cards[index].frozen ? 'Карта заблокирована' : 'Карта разблокирована'); }); };
-async function createCard(type) { if (!current.cards) current.cards = []; const card = { id: Date.now(), type: type, number: generateCardNumber('ЗТ87'), name: 'ЗАТО-Банк', expires: new Date(new Date().setFullYear(new Date().getFullYear() + 3)).toISOString(), frozen: false, design: null, textColor: '#fff' }; current.cards.push(card); await mutate(u => { u.cards = current.cards; }); renderCards(); showToast(`Выпущена ${type === 'credit' ? 'кредитная' : type === 'savings' ? 'накопительная' : 'дебетовая'} карта`); }
+async function createCard(type) { if (!current.cards) current.cards = []; const card = { id: Date.now(), type: type, number: generateCardNumber('ЗТ87'), name: 'ЗАТО-Банк', expires: new Date(new Date().setFullYear(new Date().getFullYear() + 3)).toISOString(), frozen: false, design: null, textColor: '#fff' }; current.cards.push(card); await mutate(u => { u.cards = current.cards; }); renderCards(); showToast(`Выпущена карта`); }
 $('#issueDebitCard').onclick = () => createCard('debit');
 $('#issueCreditCard').onclick = () => createCard('credit');
 $('#createSavingsAccount').onclick = () => createCard('savings');
 
-// ===== НОВЫЕ ВИДЖЕТЫ (Музыка, Лотерея, Копилка и т.д.) =====
+// ===== ВИДЖЕТЫ =====
 let usdRate = 92.5, eurRate = 99.8;
 function updateRates() {
   usdRate += (Math.random() - 0.5) * 0.2; eurRate += (Math.random() - 0.5) * 0.2;
@@ -684,16 +846,13 @@ const playlist = [
 function initMusic() {
   if (document.getElementById('midiPlayer')) return;
   const player = document.createElement('div'); player.id = 'midiPlayer';
-  player.style.cssText = 'position:fixed;bottom:20px;left:20px;z-index:999;background:#d4d0c8;border:2px outset #fff;padding:4px 8px;font:11px "MS Sans Serif",sans-serif;display:flex;align-items:center;gap:8px;box-shadow:2px 2px 0 #000';
-  player.innerHTML = `<button id="playMusic" style="background:#c0c0c0;border:1px solid #808080;padding:2px 8px;cursor:pointer">▶ Play</button><button id="prevMusic" style="background:#c0c0c0;border:1px solid #808080;padding:2px 6px;cursor:pointer">◀◀</button><button id="nextMusic" style="background:#c0c0c0;border:1px solid #808080;padding:2px 6px;cursor:pointer">▶▶</button><span id="trackName" style="min-width:150px;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#000;font-weight:bold">Выберите трек</span><span style="font-size:9px;color:#666">RETRO-FM</span>`;
+  player.style.cssText = 'position:fixed;bottom:20px;left:20px;z-index:999;background:#d4d0c8;border:2px outset #fff;padding:4px 8px;font:11px "MS Sans Serif",sans-serif;display:flex;align-items:center;gap:8px;';
+  player.innerHTML = `<button id="playMusic" style="background:#c0c0c0;border:1px solid #808080;padding:2px 8px;cursor:pointer">▶ Play</button><span id="trackName" style="min-width:150px;max:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#000;font-weight:bold">Выберите трек</span>`;
   document.body.appendChild(player);
   musicAudio = new Audio(); musicAudio.volume = 0.2;
   const updateTrackLabel = () => { const nameEl = document.getElementById('trackName'); if (playlist[currentTrackIndex]) nameEl.textContent = playlist[currentTrackIndex].title; };
   const playTrack = () => { if (!playlist[currentTrackIndex]) return; musicAudio.src = playlist[currentTrackIndex].src; musicAudio.play().then(() => { document.getElementById('playMusic').textContent = '⏸ Stop'; }).catch(e => showToast('Нажмите Play еще раз')); updateTrackLabel(); };
   document.getElementById('playMusic').onclick = () => { if (musicAudio.paused) playTrack(); else { musicAudio.pause(); document.getElementById('playMusic').textContent = '▶ Play'; } };
-  document.getElementById('nextMusic').onclick = () => { if (!playlist.length) return; currentTrackIndex = (currentTrackIndex + 1) % playlist.length; if (!musicAudio.paused) playTrack(); else updateTrackLabel(); };
-  document.getElementById('prevMusic').onclick = () => { if (!playlist.length) return; currentTrackIndex = (currentTrackIndex - 1 + playlist.length) % playlist.length; if (!musicAudio.paused) playTrack(); else updateTrackLabel(); };
-  musicAudio.onended = () => { if (playlist.length > 1) { currentTrackIndex = (currentTrackIndex + 1) % playlist.length; playTrack(); } else { document.getElementById('playMusic').textContent = '▶ Play'; } };
   updateTrackLabel();
 }
 
@@ -701,8 +860,7 @@ function initLottery() {
   const target = document.querySelector('#page-overview .grid > div:last-child');
   if (!target || document.getElementById('lotteryWidget')) return;
   const div = document.createElement('div'); div.id = 'lotteryWidget';
-  div.innerHTML = `<div class="card" style="margin-top:15px"><div class="section-head"><h3>Ежедневная лотерея</h3></div><p>Выиграйте до 500 ₽ раз в день.</p><button class="primary" id="playLottery">Испытать удачу</button><div>
- id="lotteryResult" style="margin-top:10px;font-weight:bold"></div></div>`;
+  div.innerHTML = `<div class="card" style="margin-top:15px"><div class="section-head"><h3>Ежедневная лотерея</h3></div><p>Выиграйте до 500 ₽ раз в день.</p><button class="primary" id="playLottery">Испытать удачу</button><div id="lotteryResult" style="margin-top:10px;font-weight:bold"></div></div>`;
   target.appendChild(div);
   document.getElementById('playLottery').onclick = async () => { const today = new Date().toISOString().slice(0, 10); if (current.lastLottery === today) return showToast('Вы уже играли сегодня.'); const win = Math.floor(Math.random() * 500) + 1; await mutate(u => { u.balance += win; u.lastLottery = today; u.transactions.push(tx('Выигрыш в лотерее', win, 'in')); }); document.getElementById('lotteryResult').innerHTML = `<span style="color:#1f643e">Вы выиграли ${money(win)}!</span>`; showToast(`Поздравляем!`); };
 }
@@ -717,32 +875,6 @@ function initPiggy() {
 }
 function updatePiggyView() { const el = document.getElementById('piggyBalance'); if (el && current) el.textContent = money(current.piggy || 0); }
 
-function initTemplates() {
-  const target = document.querySelector('#page-payments .grid > div:last-child');
-  if (!target || document.getElementById('templateWidget')) return;
-  const div = document.createElement('div'); div.id = 'templateWidget';
-  div.innerHTML = `<div class="card" style="margin-top:15px"><div class="section-head"><h3>Мои шаблоны</h3></div><div id="templateList" style="margin-bottom:10px"></div><button class="secondary" id="saveTemplateBtn">Сохранить текущий перевод как шаблон</button></div>`;
-  target.appendChild(div);
-  document.getElementById('saveTemplateBtn').onclick = async () => { const login = document.querySelector('#recipient').value.trim(); const amount = document.querySelector('#transferAmount').value; if (!login) return showToast('Введите логин получателя'); await mutate(u => { if (!u.templates) u.templates = []; u.templates.push({ login, amount: Number(amount) || 0 }); }); renderTemplatesView(); showToast('Шаблон сохранён'); };
-}
-function renderTemplatesView() { const list = document.getElementById('templateList'); if (!list || !current) return; if (!current.templates || current.templates.length === 0) { list.innerHTML = '<p class="empty">Нет сохранённых шаблонов.</p>'; return; } list.innerHTML = current.templates.map((t, i) => `<div class="receipt-line"><span>${t.login}</span><button class="secondary" style="padding:2px 6px;font-size:11px" onclick="applyTemplate(${i})">Использовать</button></div>`).join(''); }
-window.applyTemplate = (i) => { const t = current.templates[i]; document.querySelector('#recipient').value = t.login; document.querySelector('#transferAmount').value = t.amount || ''; goPage('payments'); showToast('Шаблон применён'); };
-
-function initAutoPays() {
-  const target = document.querySelector('#page-payments .grid > div:last-child');
-  if (!target || document.getElementById('autoPayWidget')) return;
-  const div = document.createElement('div'); div.id = 'autoPayWidget';
-  div.innerHTML = `<div class="card" style="margin-top:15px"><div class="section-head"><h3>Автоплатежи</h3></div><div id="autoPayList" style="margin-bottom:10px"></div><form id="autoPayForm" style="display:flex;gap:5px;flex-wrap:wrap"><input id="apRecipient" placeholder="Логин" required style="flex:1;min-width:100px"><input id="apAmount" type="number" placeholder="Сумма" required style="width:100px"><button class="secondary" type="submit">Добавить</button></form></div>`;
-  target.appendChild(div);
-  document.getElementById('autoPayForm').onsubmit = async (e) => { e.preventDefault(); const recipient = document.querySelector('#apRecipient').value.trim(); const amount = Number(document.querySelector('#apAmount').value); if (!recipient || amount < 1) return; await mutate(u => { if (!u.autoPays) u.autoPays = []; u.autoPays.push({ recipient, amount, nextDate: new Date().toISOString() }); }); document.getElementById('autoPayForm').reset(); renderAutoPaysView(); showToast('Автоплатёж добавлен'); };
-}
-function renderAutoPaysView() { const list = document.getElementById('autoPayList'); if (!list || !current) return; if (!current.autoPays || current.autoPays.length === 0) { list.innerHTML = '<p class="empty">Нет активных автоплатежей.</p>'; return; } list.innerHTML = current.autoPays.map((ap, i) => `<div class="receipt-line"><span>${ap.recipient} — ${money(ap.amount)}</span><button class="secondary" style="padding:2px 6px;font-size:11px;color:#8c2d2d" onclick="deleteAutoPay(${i})">Удалить</button></div>`).join(''); }
-window.deleteAutoPay = async (i) => {
-  current.autoPays.splice(i, 1);
-  await mutate(u => { u.autoPays = current.autoPays; });
-  renderAutoPaysView();
-};
-
 // ===== ПЕРЕХВАТ ДЛЯ КОПИЛКИ =====
 const originalMutate = mutate;
 mutate = async function(fn) {
@@ -752,13 +884,10 @@ mutate = async function(fn) {
   });
 };
 
-// ===== РЕТРО-ОКНО И FIREBASE =====
-let fullscreenRequested = false;
-document.addEventListener('click', () => { if (!fullscreenRequested && !document.fullscreenElement) { document.documentElement.requestFullscreen().then(() => { fullscreenRequested = true; }).catch(() => { fullscreenRequested = true; }); } }, { once: true });
-
+// ===== ИНИЦИАЛИЗАЦИЯ И FIREBASE =====
 const originalRenderAll = renderAll;
 renderAll = function() {
-  originalRenderAll(); updateRates(); initMusic(); initLottery(); initPiggy(); initTemplates(); initAutoPays(); renderTemplatesView(); renderAutoPaysView(); updatePiggyView(); renderBrokerUpd(); renderCards();
+  originalRenderAll(); updateRates(); initMusic(); initLottery(); initPiggy();
 };
 
 auth.onAuthStateChanged(async fbUser=>{
@@ -773,7 +902,7 @@ auth.onAuthStateChanged(async fbUser=>{
   }catch(err){showToast(err.message||'Ошибка загрузки.');}
 });
 
-// ===== АДМИН-ПАНЕЛЬ (Логика, логин, функции) =====
+// ===== АДМИН-ПАНЕЛЬ =====
 let adminSession=false,adminCurrent=null;
 function getAudit(){return AUDIT_COL.orderBy('time','desc').limit(500).get().then(s=>s.docs.map(d=>({id:d.id,...d.data()}))).catch(()=>[])}
 async function pushAudit(action,details){try{await AUDIT_COL.add({time:new Date().toISOString(),admin:adminCurrent?.login||current?.login||'admin',action,details:details||''})}catch{}}
