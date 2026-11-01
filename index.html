@@ -716,7 +716,11 @@ function initAutoPays() {
   document.getElementById('autoPayForm').onsubmit = async (e) => { e.preventDefault(); const recipient = document.querySelector('#apRecipient').value.trim(); const amount = Number(document.querySelector('#apAmount').value); if (!recipient || amount < 1) return; await mutate(u => { if (!u.autoPays) u.autoPays = []; u.autoPays.push({ recipient, amount, nextDate: new Date().toISOString() }); }); document.getElementById('autoPayForm').reset(); renderAutoPaysView(); showToast('Автоплатёж добавлен'); };
 }
 function renderAutoPaysView() { const list = document.getElementById('autoPayList'); if (!list || !current) return; if (!current.autoPays || current.autoPays.length === 0) { list.innerHTML = '<p class="empty">Нет активных автоплатежей.</p>'; return; } list.innerHTML = current.autoPays.map((ap, i) => `<div class="receipt-line"><span>${ap.recipient} — ${money(ap.amount)}</span><button class="secondary" style="padding:2px 6px;font-size:11px;color:#8c2d2d" onclick="deleteAutoPay(${i})">Удалить</button></div>`).join(''); }
-window.deleteAutoPay = async (i) => { current.autoPays.splice(i, 1); await mutate(u => { u.autoPays = current.autoPays; }); renderAutoPaysView(); };
+window.deleteAutoPay = async (i) => {
+  current.autoPays.splice(i, 1);
+  await mutate(u => { u.autoPays = current.autoPays; });
+  renderAutoPaysView();
+};
 
 // ===== ПЕРЕХВАТ ДЛЯ КОПИЛКИ =====
 const originalMutate = mutate;
@@ -781,6 +785,7 @@ function closeConfirm(ok){ $('#admConfirmBack').classList.add('hidden'); const f
 $('#admConfirmCancel').onclick=()=>closeConfirm(false);
 $('#admConfirmOk').onclick=()=>{ const reason=$('#admConfirmReason').value.trim(); if(!reason){$('#admConfirmErr').textContent='Укажите основание.';return;} $('#admConfirmBack').dataset.reason=reason;closeConfirm(true); };
 $('#admConfirmReason').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$('#admConfirmOk').click()}});
+
 async function renderAdmin(){
   if(!adminSession)return;
   const users=await getUsers();
@@ -870,6 +875,9 @@ $('#admExportTx').onclick=async()=>{ if(!adminSession)return; const users=await 
 $('#admAuditClear').onclick=async()=>{ if(!adminSession)return; const ok=await askConfirm('Очистка журнала','Все записи аудита будут удалены.','Журнал',true); if(!ok)return; try{const snap=await AUDIT_COL.get();const batch=db.batch();snap.docs.forEach(d=>batch.delete(d.ref));await batch.commit();}catch{} await pushAudit('Очистка аудита',''); await renderAdmin();showToast('Очищено.'); };
 const baseBellAdmin=$('#bell').onclick;
 $('#bell').onclick=()=>{ if(adminSession){goPage('admin');$('#admAudit')?.scrollIntoView({behavior:'smooth',block:'center'});showToast('Журнал админа.');return;} if(baseBellAdmin)baseBellAdmin(); };
+
+// ===== ИНИЦИАЛИЗАЦИЯ =====
+renderAll();
 </script>
 </body>
 </html>
